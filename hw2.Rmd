@@ -1,0 +1,751 @@
+---
+title: "stats101c_hw2"
+author: "Takao"
+date: "10/12/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Takao Oba
+# HW 2
+
+## Question 1
+
+### (a) Report dimension of your data and summary statistics of the variables in your data
+
+```{r}
+setwd("/Users/takaooba/Downloads/")
+library(tidyverse)
+breast <- read_csv("BreastCancer.csv")
+breast <- breast[,-1]
+head(breast)
+```
+
+
+```{r}
+dim(breast)
+```
+
+Upon removing the first column, we have that the dimension of the data is 569 by 11.
+
+```{r}
+summary(breast)
+```
+
+Shown above is the summary statistics of the variables in the data.
+
+
+### (b) Choose “best” three predictors based on density plots of Malignant and Benign categories. 
+
+```{r}
+p1 <- ggplot(breast, aes(radius_mean, color = diagnosis)) + geom_density()
+p2 <- ggplot(breast, aes(texture_mean, color = diagnosis)) + geom_density()
+p3 <- ggplot(breast, aes(perimeter_mean, color = diagnosis)) + geom_density()
+p4 <- ggplot(breast, aes(area_mean, color = diagnosis)) + geom_density()
+p5 <- ggplot(breast, aes(smoothness_mean, color = diagnosis)) + geom_density()
+p6 <- ggplot(breast, aes(compactness_mean, color = diagnosis)) + geom_density()
+p7 <- ggplot(breast, aes(concavity_mean, color = diagnosis)) + geom_density()
+p8 <- ggplot(breast, aes(concave.points_mean, color = diagnosis)) + geom_density()
+p9 <- ggplot(breast, aes(symmetry_mean, color = diagnosis)) + geom_density()
+p10 <- ggplot(breast, aes(fractal_dimension_mean, color = diagnosis)) + geom_density()
+# install.packages("gridExtra")
+library(gridExtra)
+grid.arrange(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)
+```
+
+Now we will aim to choose the three best predictors. Through the density plots, I would say that the radius_mean, perimeter_mean, and the concave.points_mean are the three best predictors.
+
+### (c) Use the “best” three predictors to create knn classifiers (k=1,3,5,7,9 and11). Use 400 observations for the training data set and 169 observations for the testing data set. Use Set.seed(1234567)
+
+```{r}
+set.seed(1234567)
+S.test.i <- sample(1:569, 169, replace = F)
+
+X.mat <- breast[,c(2,4,9)]
+S.X.test<-X.mat[S.test.i,]
+S.X.train<- X.mat[-S.test.i,]
+
+S.Y.test <- breast$diagnosis[S.test.i]
+S.Y.train <- breast$diagnosis[-S.test.i]
+
+library(class)
+
+S.out.1 <- knn(S.X.train, S.X.test, S.Y.train, k = 1)
+table(S.out.1, S.Y.test)
+# mean(S.out.1 != S.Y.test)
+# mean(S.out.1 == S.Y.test)
+
+S.out.3 <- knn(S.X.train, S.X.test, S.Y.train, k = 3)
+table(S.out.3, S.Y.test)
+# mean(S.out.3 != S.Y.test)
+# mean(S.out.3 == S.Y.test)
+
+S.out.5 <- knn(S.X.train, S.X.test, S.Y.train, k = 5)
+table(S.out.5, S.Y.test)
+# mean(S.out.5 != S.Y.test)
+# mean(S.out.5 == S.Y.test)
+
+S.out.7 <- knn(S.X.train, S.X.test, S.Y.train, k = 7)
+table(S.out.7, S.Y.test)
+# mean(S.out.7 != S.Y.test)
+# mean(S.out.7 == S.Y.test)
+
+S.out.11 <- knn(S.X.train, S.X.test, S.Y.train, k = 11)
+table(S.out.11, S.Y.test)
+# mean(S.out.11 != S.Y.test)
+# mean(S.out.11 == S.Y.test)
+
+```
+
+### (d)  Report the misclassification rate and report your best k.
+```{r}
+# Misclassification rate for k = 1
+mean(S.out.1 != S.Y.test)
+
+# Misclassification rate for k = 3
+mean(S.out.3 != S.Y.test)
+
+# Misclassification rate for k = 5
+mean(S.out.5 != S.Y.test)
+
+# Misclassification rate for k = 7
+mean(S.out.7 != S.Y.test)
+
+# Misclassification rate for k = 11
+mean(S.out.11 != S.Y.test)
+```
+
+The best k or the k with the lowest misclassification rate is when k = 1 with a misclassification rate of 0.07692308.
+
+
+### (e) Re-create your knn classifiers, but this time scale your variables first. (Use the same set of k values)
+```{r}
+set.seed(1234567)
+# Using the scale function
+X.mat1 <- scale(breast[,c(2,4,9)])
+
+S.X.test<-X.mat1[S.test.i,]
+S.X.train<- X.mat1[-S.test.i,]
+
+S.Y.test <- (breast$diagnosis[S.test.i])
+S.Y.train <- breast$diagnosis[-S.test.i]
+
+S.out.1 <- knn(S.X.train, S.X.test, S.Y.train, k = 1)
+table(S.out.1, S.Y.test)
+
+S.out.3 <- knn(S.X.train, S.X.test, S.Y.train, k = 3)
+table(S.out.3, S.Y.test)
+
+S.out.5 <- knn(S.X.train, S.X.test, S.Y.train, k = 5)
+table(S.out.5, S.Y.test)
+
+S.out.7 <- knn(S.X.train, S.X.test, S.Y.train, k = 7)
+table(S.out.7, S.Y.test)
+
+S.out.11 <- knn(S.X.train, S.X.test, S.Y.train, k = 11)
+table(S.out.11, S.Y.test)
+
+```
+
+### (f) Report the misclassification rate and report your best k.
+```{r}
+# Misclassification rate for k = 1
+mean(S.out.1 != S.Y.test)
+
+# Misclassification rate for k = 3
+mean(S.out.3 != S.Y.test)
+
+# Misclassification rate for k = 5
+mean(S.out.5 != S.Y.test)
+
+# Misclassification rate for k = 7
+mean(S.out.7 != S.Y.test)
+
+# Misclassification rate for k = 11
+mean(S.out.11 != S.Y.test)
+```
+
+The best k or the k with the lowest misclassification rate is when k = 11 with a misclassification rate of 0.0532544.
+
+
+## Question 2
+### Re-do question 1, this time use all numerical predictors. Is it any better than the results in Question 2?
+
+The numerical predictors will be everything besides the diagnosis column, thus we will have:
+```{r}
+breast_new <- breast[,-1]
+```
+
+### No scaling
+```{r}
+set.seed(1234567)
+S.test.i <- sample(1:569, 169, replace = F)
+
+X.mat <- breast_new
+S.X.test<-X.mat[S.test.i,]
+S.X.train<- X.mat[-S.test.i,]
+
+S.Y.test <- breast$diagnosis[S.test.i]
+S.Y.train <- breast$diagnosis[-S.test.i]
+
+S.out.1 <- knn(S.X.train, S.X.test, S.Y.train, k = 1)
+table(S.out.1, S.Y.test)
+
+S.out.3 <- knn(S.X.train, S.X.test, S.Y.train, k = 3)
+table(S.out.3, S.Y.test)
+
+S.out.5 <- knn(S.X.train, S.X.test, S.Y.train, k = 5)
+table(S.out.5, S.Y.test)
+
+S.out.7 <- knn(S.X.train, S.X.test, S.Y.train, k = 7)
+table(S.out.7, S.Y.test)
+
+S.out.11 <- knn(S.X.train, S.X.test, S.Y.train, k = 11)
+table(S.out.11, S.Y.test)
+```
+
+### Misclassification Rate
+```{r}
+# Misclassification rate for k = 1
+mean(S.out.1 != S.Y.test)
+
+# Misclassification rate for k = 3
+mean(S.out.3 != S.Y.test)
+
+# Misclassification rate for k = 5
+mean(S.out.5 != S.Y.test)
+
+# Misclassification rate for k = 7
+mean(S.out.7 != S.Y.test)
+
+# Misclassification rate for k = 11
+mean(S.out.11 != S.Y.test)
+```
+
+The best k or the k with the lowest misclassification rate is when k = 11 with a misclassification rate of 0.08284024.
+
+### After scaling
+```{r}
+set.seed(1234567)
+# Using the scale function
+X.mat1 <- scale(breast_new)
+
+S.X.test<-X.mat1[S.test.i,]
+S.X.train<- X.mat1[-S.test.i,]
+
+S.Y.test <- breast$diagnosis[S.test.i]
+S.Y.train <- breast$diagnosis[-S.test.i]
+
+S.out.1 <- knn(S.X.train, S.X.test, S.Y.train, k = 1)
+table(S.out.1, S.Y.test)
+
+S.out.3 <- knn(S.X.train, S.X.test, S.Y.train, k = 3)
+table(S.out.3, S.Y.test)
+
+S.out.5 <- knn(S.X.train, S.X.test, S.Y.train, k = 5)
+table(S.out.5, S.Y.test)
+
+S.out.7 <- knn(S.X.train, S.X.test, S.Y.train, k = 7)
+table(S.out.7, S.Y.test)
+
+S.out.11 <- knn(S.X.train, S.X.test, S.Y.train, k = 11)
+table(S.out.11, S.Y.test)
+
+```
+
+### Misclassification rate after scaling
+```{r}
+# Misclassification rate for k = 1
+mean(S.out.1 != S.Y.test)
+
+# Misclassification rate for k = 3
+mean(S.out.3 != S.Y.test)
+
+# Misclassification rate for k = 5
+mean(S.out.5 != S.Y.test)
+
+# Misclassification rate for k = 7
+mean(S.out.7 != S.Y.test)
+
+# Misclassification rate for k = 11
+mean(S.out.11 != S.Y.test)
+```
+
+The best k or the k with the lowest misclassification rate is when k = 11 with a misclassification rate of 0.0295858.
+
+Comparing to the parts in Question 1, we have that the misclassification rate is lower with numerical predictors, so it is in fact better than the results in question 1.
+
+
+## Question 3
+
+```{r}
+breast <- read_csv("/Users/takaooba/Downloads/BreastCancer.csv")
+breast <- breast[,-1]
+# head(breast)
+```
+
+
+### (a) Apply logistic regression model using all predictors. Report confusion matrices of both the training and the test data sets. (Same training and testing data sets created for question 2.
+
+```{r}
+lr.model <- glm(factor(diagnosis) ~ . , data = breast, family = binomial())
+
+breast2 <- breast[,-1]
+
+breast.test <- breast2[S.test.i,]
+
+pred.test <- predict(lr.model, breast.test)
+# breast.test
+
+breast.glm.pred = rep("B", length(pred.test))
+breast.glm.pred[pred.test >= 0] = "M"
+
+# Confusion matrix of the testing data sets
+table1 <- table(breast.glm.pred, S.Y.test)
+table1
+```
+
+Now we will assess the training data
+
+```{r}
+breast.train <- breast2[-S.test.i,]
+pred.test.2 <- predict(lr.model, breast.train)
+
+breast.glm.pred.2 = rep("B", length(pred.test.2))
+breast.glm.pred.2[pred.test.2 >= 0] = "M"
+
+# Confusion matrix of the training data
+table2 <- table(breast.glm.pred.2,S.Y.train)
+table2
+```
+
+
+```{r}
+summary(lr.model)
+```
+
+Above is the summary output of the generated logistic regression. We assess that there is a great difference between the null deviance which closely resembles the SSTotal and the residual deviance which closely resembles the SSE. We like the gap that we notice and is a good thing to see. 
+
+### (b) Scale all variables, the create another logistic regression model using all predictors.
+
+```{r}
+breast3 <- data.frame(scale(breast[,-1]))
+lr.model <- glm(factor(diagnosis) ~ . , data = breast, family = binomial())
+
+breast.test.1 <- breast3[S.test.i,]
+
+pred.test.3 <- predict(lr.model, breast.test.1)
+# breast.test
+
+breast.glm.pred.3 = rep("B", length(pred.test.3))
+breast.glm.pred.3[pred.test.3 >= 0] = "M"
+
+# Confusion matrix of the testing data sets
+table3 <- table(breast.glm.pred.3, S.Y.test)
+table3
+```
+
+Now we will assess the training data
+
+```{r}
+breast.train.2 <- breast3[-S.test.i,]
+pred.test.4 <- predict(lr.model, breast.train.2)
+breast.glm.pred.4 = rep("B", length(pred.test.4))
+breast.glm.pred.4[pred.test.4 >= 0] = "M"
+
+# Confusion matrix of the training data
+table4 <- table(breast.glm.pred.4,S.Y.train)
+table4
+```
+
+### (c) Report your confusion matrices and misclassification rates for both the training and testing data sets. 
+
+
+For the unscaled data
+```{r}
+table1
+# Misclassification rate
+mean(breast.glm.pred != S.Y.test)
+```
+
+```{r}
+table2
+# Misclassification rate
+mean(breast.glm.pred.2 != S.Y.train)
+```
+
+For scaled data
+
+```{r}
+table3
+# Misclassification rate
+mean(breast.glm.pred.3 != S.Y.test)
+```
+
+```{r}
+table4
+# Misclassification rate
+mean(breast.glm.pred.4 != S.Y.train)
+```
+
+## Question 4
+## Compare and contrast the results of your KNN models and your logistic regression models. Which one of those models is your hero model? Why?
+
+We assess the misclassification rate for all the table that we have created thus far. In question 2, we have concluded that the best k or the k with the lowest misclassification rate is when k = 11 with a misclassification rate of 0.0295858. However, in question 3, we see that the best model (out of all the models that we have generated) is the unscaled glm model utilizing logistic regression. When using this model, we were able to achieve the lowest misclassification rate of 0.01775148.
+
+## Question 5
+## Split the Boston data posted on bruinlearn week 3 into 80% training and 20% testing data: use set.seed(1128)
+
+```{r}
+bostonData <- read_csv("/Users/takaooba/Downloads/boston.csv")
+dim(bostonData)
+```
+
+
+
+```{r}
+506*0.2
+# training 405, testing 101
+set.seed(1128)
+test.i <- sample(1:506, 101, replace = F)
+x.test <- bostonData[test.i,]
+x.train <- bostonData[-test.i,]
+
+
+# the median of the crime rate can be determined through the summary function
+summary(x.train$crim)
+# median is 0.26363
+crMedian <- 0.26363
+
+
+# We will determine which observations are greater than the median and will observe that through assigning the value 1. If not we will assign it to be 0
+crimrate <- rep(0, length(bostonData$crim))
+for (i in 1:length(bostonData$crim)){
+  if(bostonData$crim[i] > crMedian){
+    crimrate[i] <- 1
+  }
+}
+
+bostonData1 <- data.frame(bostonData, crimrate)
+head(bostonData1)
+
+# We will look at the new train and testing data frame
+boston.test <- bostonData1[test.i,]
+boston.train <- bostonData1[-test.i,]
+dim(boston.test)
+```
+
+
+We will then investigate which predictors are the most significant
+```{r}
+cor(boston.train)
+```
+
+From above, we can see that the best predictors are (from best going down): 
+nox, rad, dis, tax, age. Now we can further investigate by 3 predictors, 4 predictors, and 5 predictors.
+
+
+
+## Using the training data fit classification models in order to predict whether a given suburb has a crime rate above or below the median (create a new response variable for crime rate). Explore and report the performance of logistic regression and KNN models using various subsets of the predictors (Best 3 predictors, Best 4 predictors, and Best 5 predictors). Describe your findings.
+
+
+## 3 Predictors
+
+```{r}
+lr.model3 <- glm(factor(crimrate) ~ nox + rad + dis, data = bostonData1, family = binomial())
+summary(lr.model3)
+```
+This results is pretty interesting, in fact we see that there is a gap between the null deviance and the residual deviance. However, "dis" is an insignificant predictor as the z-value is 1.489. 
+
+```{r}
+boston.pred <- predict(lr.model3, data = boston.train, newdata = boston.test)
+boston.glm.pred <- rep(0, length(boston.pred))
+boston.glm.pred[boston.pred >= 0] <- 1
+
+length(boston.glm.pred)
+# boston.test
+table(boston.glm.pred, boston.test[,15])
+
+#The misclassification rate is going to be calculated as 
+mean(boston.glm.pred != boston.test[,15])
+```
+
+We will try to assess the next best predictor, and simply going off the next in the list, we will try to assess nox, rad, and tax
+
+```{r}
+lr.model3 <- glm(factor(crimrate) ~ nox + rad + age, family = binomial(), data = bostonData1)
+summary(lr.model3)
+
+lr.model3 <- glm(factor(crimrate) ~ nox + dis + tax, family = binomial(), data = bostonData1)
+summary(lr.model3)
+
+lr.model3 <- glm(factor(crimrate) ~ nox + rad + tax, family = binomial(), data = bostonData1)
+summary(lr.model3)
+```
+
+We see that when doing so we have that all the predictors show significance.
+Thus, for 3 predictors, the subset will include "nox" "rad" "tax"
+
+## 4 predictors
+We will try to examine the top 4 predictors first 
+
+```{r}
+lr.model4 <- glm(factor(crimrate) ~ nox + rad + tax + age, data = bostonData1, family = binomial())
+summary(lr.model4)
+
+lr.model4 <- glm(factor(crimrate) ~ nox + rad + dis + age, data = bostonData1, family = binomial())
+summary(lr.model4)
+
+lr.model4 <- glm(factor(crimrate) ~ nox + rad + dis + tax, data = bostonData1, family = binomial())
+summary(lr.model4)
+```
+
+```{r}
+boston.pred.2 <- predict(lr.model3, data = boston.train, newdata = boston.test)
+boston.glm.pred.2 <- rep(0, length(boston.pred))
+boston.glm.pred.2[boston.pred >= 0] <- 1
+
+length(boston.glm.pred.2)
+# boston.test
+table(boston.glm.pred.2, boston.test[,15])
+
+#The misclassification rate is going to be calculated as 
+mean(boston.glm.pred.2 != boston.test[,15])
+```
+
+The model with the predictors "nox" "rad" "tax" "age" performs the best with the lowest misclassification rate as well as only one of the predictors does not show statistical significance.
+
+
+## 5 Predictors
+```{r}
+lr.model5 <- glm(factor(crimrate) ~ nox + rad + tax + age + dis, data = bostonData1, family = binomial())
+summary(lr.model5)
+```
+
+
+```{r}
+boston.pred3 <- predict(lr.model3, data = boston.train, newdata = boston.test)
+boston.glm.pred3 <- rep(0, length(boston.pred3))
+boston.glm.pred3[boston.pred >= 0] <- 1
+
+length(boston.glm.pred3)
+# boston.test
+table(boston.glm.pred3, boston.test[,15])
+
+#The misclassification rate is going to be calculated as 
+mean(boston.glm.pred3 != boston.test[,15])
+```
+
+Above result with the five predictors nox, rad, dis, tax, age will generate the best model with five predictors. However, the numbers that are outputted seems very familiar. Yes, although the preditors itself was added to the model, the confusion matrix and the misclassification rate remains the same. Thus, it suffices to say that the additional predictors that are added will generate the same result and thus is only making it more difficult for the researchers as the model will become more complex.
+
+
+## knn models 
+
+## 3 predictors
+### k = 1
+```{r}
+pred3 <- c(5,8,9)
+boston.train.3.1 <- boston.train[, pred3]
+boston.test.3.1 <- boston.test[,pred3]
+boston.knn.3.1 <- knn(boston.train.3.1, boston.test.3.1, boston.train[,15],k = 1)
+table(boston.knn.3.1, boston.test[,15])
+mean(boston.knn.3.1 != boston.test[,15])
+```
+
+### k = 3
+
+```{r}
+boston.train.3.3 <- boston.train[, pred3]
+boston.test.3.3 <- boston.test[,pred3]
+boston.knn.3.3 <- knn(boston.train.3.3, boston.test.3.3, boston.train[,15], k = 3)
+table(boston.knn.3.3, boston.test[,15])
+mean(boston.knn.3.3 != boston.test[,15])
+```
+
+### k = 5
+```{r}
+boston.train.3.5 <- boston.train[, pred3]
+boston.test.3.5 <- boston.test[,pred3]
+boston.knn.3.5 <- knn(boston.train.3.5, boston.test.3.5, boston.train[,15],k = 5)
+table(boston.knn.3.5, boston.test[,15])
+mean(boston.knn.3.5 != boston.test[,15])
+```
+
+### k = 7
+
+```{r}
+boston.train.3.7 <- boston.train[, pred3]
+boston.test.3.7 <- boston.test[,pred3]
+boston.knn.3.7 <- knn(boston.train.3.7, boston.test.3.7, boston.train[,15],k = 7)
+table(boston.knn.3.7, boston.test[,15])
+mean(boston.knn.3.7 != boston.test[,15])
+```
+
+### k = 9
+```{r}
+boston.train.3.9 <- boston.train[, pred3]
+boston.test.3.9 <- boston.test[,pred3]
+boston.knn.3.9 <- knn(boston.train.3.9, boston.test.3.9, boston.train[,15],k = 9)
+table(boston.knn.3.9, boston.test[,15])
+mean(boston.knn.3.9 != boston.test[,15])
+```
+
+### k = 11
+```{r}
+boston.train.3.11 <- boston.train[, pred3]
+boston.test.3.11 <- boston.test[,pred3]
+boston.knn.3.11 <- knn(boston.train.3.11, boston.test.3.11, boston.train[,15],k = 11)
+table(boston.knn.3.11, boston.test[,15])
+mean(boston.knn.3.11 != boston.test[,15])
+```
+The lowest misclassification rate occurs when k = 1, 3, and 5 for when there are 3 predictors.
+
+
+## 4 predictors
+
+### k = 1
+```{r}
+pred4 <- c(5,8,9,10)
+boston.train.4.1 <- boston.train[, pred4]
+boston.test.4.1 <- boston.test[,pred4]
+boston.knn.4.1 <- knn(boston.train.4.1, boston.test.4.1, boston.train[,15],k = 1)
+table(boston.knn.4.1, boston.test[,15])
+mean(boston.knn.4.1 != boston.test[,15])
+```
+
+### k = 3
+```{r}
+pred4 <- c(5,8,9,10)
+boston.train.4.3 <- boston.train[, pred4]
+boston.test.4.3 <- boston.test[,pred4]
+boston.knn.4.3 <- knn(boston.train.4.3, boston.test.4.3, boston.train[,15],k = 3)
+table(boston.knn.4.3, boston.test[,15])
+mean(boston.knn.4.3 != boston.test[,15])
+```
+
+### k = 5
+```{r}
+pred4 <- c(5,8,9,10)
+boston.train.4.5 <- boston.train[, pred4]
+boston.test.4.5 <- boston.test[,pred4]
+boston.knn.4.5 <- knn(boston.train.4.5, boston.test.4.5, boston.train[,15],k = 5)
+table(boston.knn.4.5, boston.test[,15])
+mean(boston.knn.4.5 != boston.test[,15])
+```
+
+
+### k = 7
+
+```{r}
+pred4 <- c(5,8,9,10)
+boston.train.4.7 <- boston.train[, pred4]
+boston.test.4.7 <- boston.test[,pred4]
+boston.knn.4.7 <- knn(boston.train.4.7, boston.test.4.7, boston.train[,15],k = 7)
+table(boston.knn.4.7, boston.test[,15])
+mean(boston.knn.4.7 != boston.test[,15])
+```
+
+
+### k = 9
+```{r}
+pred4 <- c(5,8,9,10)
+boston.train.4.9 <- boston.train[, pred4]
+boston.test.4.9 <- boston.test[,pred4]
+boston.knn.4.9 <- knn(boston.train.4.9, boston.test.4.9, boston.train[,15],k = 9)
+table(boston.knn.4.9, boston.test[,15])
+mean(boston.knn.4.9 != boston.test[,15])
+```
+
+### k = 11
+```{r}
+pred4 <- c(5,8,9,10)
+boston.train.4.11 <- boston.train[, pred4]
+boston.test.4.11 <- boston.test[,pred4]
+boston.knn.4.11 <- knn(boston.train.4.11, boston.test.4.11, boston.train[,15],k = 11)
+table(boston.knn.4.11, boston.test[,15])
+mean(boston.knn.4.11 != boston.test[,15])
+```
+
+The lowest misclassification rate occurs when k = 1 for when there are 4 predictors.
+
+
+## 5 predictors
+
+### k = 1
+```{r}
+pred5 <- c(5,7,8,9,10)
+boston.train.5.1 <- boston.train[, pred5]
+boston.test.5.1 <- boston.test[,pred5]
+boston.knn.5.1 <- knn(boston.train.5.1, boston.test.5.1, boston.train[,15],k = 1)
+table(boston.knn.5.1, boston.test[,15])
+mean(boston.knn.5.1 != boston.test[,15])
+```
+
+
+### k = 3
+```{r}
+pred5 <- c(5,7,8,9,10)
+boston.train.5.3 <- boston.train[, pred5]
+boston.test.5.3 <- boston.test[,pred5]
+boston.knn.5.3 <- knn(boston.train.5.3, boston.test.5.3, boston.train[,15],k = 3)
+table(boston.knn.5.3, boston.test[,15])
+mean(boston.knn.5.3 != boston.test[,15])
+```
+
+
+
+
+### k = 5
+```{r}
+pred5 <- c(5,7,8,9,10)
+boston.train.5.5 <- boston.train[, pred5]
+boston.test.5.5 <- boston.test[,pred5]
+boston.knn.5.5 <- knn(boston.train.5.5, boston.test.5.5, boston.train[,15],k = 5)
+table(boston.knn.5.5, boston.test[,15])
+mean(boston.knn.5.5 != boston.test[,15])
+```
+
+
+
+
+### k = 7
+```{r}
+pred5 <- c(5,7,8,9,10)
+boston.train.5.7 <- boston.train[, pred5]
+boston.test.5.7 <- boston.test[,pred5]
+boston.knn.5.7 <- knn(boston.train.5.7, boston.test.5.7, boston.train[,15],k = 7)
+table(boston.knn.5.7, boston.test[,15])
+mean(boston.knn.5.7 != boston.test[,15])
+```
+
+
+### k = 9
+```{r}
+pred5 <- c(5,7,8,9,10)
+boston.train.5.9 <- boston.train[, pred5]
+boston.test.5.9 <- boston.test[,pred5]
+boston.knn.5.9 <- knn(boston.train.5.9, boston.test.5.9, boston.train[,15],k = 9)
+table(boston.knn.5.9, boston.test[,15])
+mean(boston.knn.5.9 != boston.test[,15])
+```
+
+### k = 11
+```{r}
+pred5 <- c(5,7,8,9,10)
+boston.train.5.11 <- boston.train[, pred5]
+boston.test.5.11 <- boston.test[,pred5]
+boston.knn.5.11 <- knn(boston.train.5.11, boston.test.5.11, boston.train[,15],k = 11)
+table(boston.knn.5.11, boston.test[,15])
+mean(boston.knn.5.11 != boston.test[,15])
+```
+
+
+
+
+The lowest misclassification rate occurs when k = 3,5,7,9,11 for when there are 5 predictors.
+

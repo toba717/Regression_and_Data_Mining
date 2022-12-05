@@ -1,0 +1,526 @@
+---
+title: "stats101c_hw6"
+author: "Takao"
+date: "2022-11-29"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Homework 6
+# Takao Oba
+
+## Q1) You may have seen the "betterbirths2000" data in Stats 10.   It consists of a random sample of 2000 births in North Carolina that are collected in order to track health issues in new born babies.  These data are saved in a file better2000births.csv in the Week 9 section of the CCLE.   
+
+
+```{r}
+births <- read.csv("/Users/takaooba/Downloads/better2000births (1).csv")
+
+births <- na.omit(births)
+births$Gender <- as.factor(births$Gender)
+births$Premie <- as.factor(births$Premie)
+births$Marital <- as.factor(births$Marital)
+births$Racemom <- as.factor(births$Racedad)
+births$Racedad <- as.factor(births$Racedad)
+births$Hispmom <- as.factor(births$Hispmom)
+births$Hispdad <- as.factor(births$Hispdad)
+births$MomPriorCond <- as.factor(births$MomPriorCond)
+births$BirthDef <- as.factor(births$BirthDef)
+births$BirthComp <- as.factor(births$BirthComp)
+births$DelivComp <- as.factor(births$DelivComp)
+```
+
+
+
+
+## a) Split your data into Training and Testing.  You should have 1000 observations in your training data after omitting the missing values in your data. Use the set.seed “1128” to do the split.   Use a tree (not pruned) to predict whether a baby will be born prematurely or normal.  What is the testing misclassification error? 
+
+```{r}
+dim(births)
+
+
+
+set.seed(1128)
+test.i <- sample(1:nrow(births), 1000, replace = F)
+
+births.test <- births[-test.i,]
+births.train <- births[test.i,]
+
+```
+
+Using a tree
+
+```{r}
+# install.packages("tree")
+library(tree)
+
+births.model <- tree(formula = factor(Premie) ~ ., data = births.train)
+
+plot(births.model)
+text(births.model, pretty =0)
+
+births.y <- births.test$Premie
+
+preds <- predict(births.model, newdata = births.test, type = "class")
+
+conf.matrx <- table(preds, factor(births.test$Premie))
+
+conf.matrx
+(conf.matrx[2,1] + conf.matrx[1,2])/sum(conf.matrx)
+```
+
+The misclassification rate is 0.0621245
+
+
+## b) Use cross-validation to determine if the tree can be improved through pruning.  If so, prune the tree to the appropriate size and provide a plot. 
+
+```{r}
+cv.train <- cv.tree(births.model, FUN = prune.misclass)
+names(cv.train)
+
+# Find best value using the plot function
+plot(cv.train$dev ~ cv.train$size, type = "b")
+
+pruned.fit <- prune.misclass(births.model, best = 3)
+plot(pruned.fit)
+text(pruned.fit, pretty = TRUE)
+
+
+
+```
+
+Looking at the generated graph above, we can see that the appropriate size is 3. The lowest y value is when size = 3.
+
+
+
+```{r}
+summary(pruned.fit)
+
+# births.train
+```
+
+We will see if pruning makes the misclassification rate better. Recall that without pruning, we had a misclassification rate of 0.06212425
+
+Now, we see that the misclassification rate is 0.056 which is lower than the misclassification rate without pruning.
+
+## c) Interpret your pruned tree (or your tree in (a) if you did not need to prune).  In particular, does it tell us whether smoking is a potential cause of premature births?  What factors are associated with premature births? 
+
+Basing on the pruned tree, we have that the factors that are associated with premature births is Weights. The pruned plot have performed fairly well with a low misclassification rate. Intuitively, smoking should be a potential cause of premature births, but in this decision tree, we were not able to conclude that smoking is directly associated with premature births. 
+However, according to CDC.gov (https://www.cdc.gov/tobacco/campaign/tips/diseases/pregnancy.html#:~:text=Smoking%20slows%20your%20baby's%20growth,babies%20often%20have%20health%20problems.&text=Smoking%20can%20damage%20your%20baby's%20developing%20lungs%20and%20brain.), we have that smoking slows the baby's growth before birth, or more specifically, the weight of the baby.
+The factor that is most associated with premature births is Weights.
+
+
+## d) What is the testing misclassification error rate of your pruned tree?  Keep in mind that approximately 9% of all births are premature.  This means that if a doctor simply predict "not premature" ALWAYS, he or she will have only a 9% misclassification error.  Did you do better based on your tree models? 
+
+
+```{r}
+preds <- predict(pruned.fit, newdata = births.test, type = "class")
+
+
+conf.matrx <- table(preds, factor(births.test$Premie))
+
+conf.matrx
+(conf.matrx[2,1] + conf.matrx[1,2])/sum(conf.matrx)
+```
+The misclassification rate for testing is 0.05711423.
+Since the misclassification rate is 5.71%, which is less than the 9% misclassification error, we have that this tree models is better than simply predicting "not premature" for all the babies. 
+
+
+## Q2) a) Use the same data (training and testing parts from Q1). Use tree (not pruned) to predict the weight of the baby (a numerical variable) using all the other variables in the data aspredictors. What is your MSE? 
+
+
+```{r}
+prd.weight <- tree(weight ~ ., data = births.train)
+plot(prd.weight)
+text(prd.weight, pretty = 0)
+
+yhat.train <- predict(prd.weight, newdata = births.test, type = "vector")
+
+head(yhat.train)
+```
+
+```{r}
+# the MSE is determined through direct calculation
+
+mean((births.test$weight - yhat.train)^2)
+
+
+```
+
+
+## b) Use cross-validation to determine if the tree can be improved through pruning.  If so, prune the tree to the appropriate size and provide a plot. 
+
+
+```{r}
+cv.train = cv.tree(prd.weight, FUN = prune.tree)
+names(cv.train)
+summary(cv.train)
+
+plot(cv.train$size, cv.train$dev)
+```
+
+From the above table, we have that the best size we can choose is 4.
+
+```{r}
+# make pruned tree
+
+train.pruned <- prune.tree(prd.weight, best = 4)
+plot(train.pruned)
+text(train.pruned, pretty = TRUE)
+
+
+summary(train.pruned)
+```
+
+## c) Interpret your pruned tree (or your tree in (a) if you did not need to prune).  In particular, does it tell us whether the number of visits predictor is an important feature of baby weights at birth?  What other predictor you think are import predictors are associated with weight based on your pruned tree model? 
+
+
+Referring back to the constructed tree above, we have that the number of visits predictor is not an important feature of baby weights at birth. This is because the number of visitors are not one of the components in the decision tree. Further, the predictors that are used in the trees are Premie, Apgar1, and Racemom. These three predictors are associated with weight based on my pruned tree model.
+
+
+## d) Report the MSE of the updated pruned tree model. 
+
+
+```{r}
+# Directly calculating the MSE
+
+prd.test <- predict(train.pruned, newdata = births.test)
+
+tempweight <- births.test$weight
+
+mse <- mean((tempweight - prd.test)^2)
+mse
+```
+
+
+
+## Q3) Download the icu data from ccle week 9: Split the data into 70% training and 30% testing using set.seed(1128). 
+
+```{r}
+icu <- read.csv("/Users/takaooba/Downloads/icu data.csv", stringsAsFactors = T)
+
+dim(icu)
+head(icu)
+```
+
+```{r}
+# Splitting the data into testing and training
+set.seed(1128)
+sam <- sample(1:200, 140, replace = F)
+icu.train <- icu[sam,]
+icu.test <- icu[-sam,]
+```
+
+
+
+
+## a) Apply Bagging classification technique to predict the surviving status of an ICU patient. Note we have 19 predictors, so we use randomForest library to do so. Report the model summary (confusion matrices of both the training and the testing data, report the corresponding misclassification rates) 
+
+
+```{r}
+set.seed(1128)
+dim(icu.train)
+
+# The amount of predictors is 19
+# install.packages("randomForest")
+library(randomForest)
+bag.model <- randomForest(STA ~ ., data = icu.train, mtry = 19, importance = T)
+```
+
+```{r}
+# For training data
+icu.train.pred <- predict(bag.model, data = icu.train)
+
+# Confusion matrix
+table(icu.train.pred, icu.train$STA)
+
+# misclassification rate
+mean(icu.train.pred != icu.train$STA)
+
+```
+
+
+```{r}
+# For testing data
+icu.test.pred <- predict(bag.model, newdata = icu.test)
+
+# Confusion matrix
+table(icu.test.pred, icu.test$STA)
+
+# misclassification rate
+mean(icu.test.pred != icu.test$STA)
+```
+
+
+## b) Use the importance function on your Bagging model to identify the 6 most important predictors.  
+
+```{r}
+# Assess the important predictors using the varImpPlot
+importance(bag.model)
+varImpPlot(bag.model)
+```
+
+## c) Apply Random Forest classification technique to predict the surviving status of an ICU patient using the predictors listed in part b). Report the model summary (confusion matrices of both the training and the testing data, report the corresponding misclassification rates) 
+
+```{r}
+set.seed(1128)
+head(icu.train)
+icu.forest <- randomForest(STA~age.c + sys.c + LOC + TYP + CRN + CAN, data = icu.train, mtry = 6, importance = T )
+
+summary(icu.forest)
+
+# Using the above model, we will predict the y value
+icu.forest.train <- predict(icu.forest, data = icu.train)
+
+
+# The confusion matrix is below
+table(icu.forest.train, icu.train$STA)
+
+# From the confusion matrix, we have the misclassification rate is
+mean(icu.forest.train != icu.train$STA)
+
+# Moving on to the testing points, we have the following
+icu.forest <- randomForest(STA~age.c + sys.c + LOC + TYP + CRN + CAN, data = icu.test, mtry = 6, importance = T )
+icu.forest.test <- predict(icu.forest, data = icu.test)
+table(icu.forest.test, icu.test$STA)
+
+mean(icu.forest.test != icu.test$STA)
+
+```
+
+We have that the misclassification rate for the training data is 0.1785714 and for the testing data is 0.1833333
+
+## d) What is Enough number of trees in both models (Bagging and Random Forest)? 
+
+```{r}
+set.seed(1128)
+
+num <- c(seq(0.1, 0.9, 0.5), 1:200)
+icu.mse.bag <- c()
+icu.mse.forest <- c()
+k <- 1
+
+for (i in num){
+  icu.bagging <- randomForest(STA ~ ., data = icu.train, mtry = 19, importance = T, ntree = 10*i)
+  icu.forest <- randomForest(STA~age.c + sys.c + LOC + TYP + CRN + CAN, data = icu.train, mtry = 6, importance = T )
+  
+  pred.bag <- predict(icu.bagging, newdata = icu.test)
+  pred.forest <- predict(icu.forest, newdata = icu.test)
+  error.bag <- mean(icu.test$STA != pred.bag)
+  error.forest <- mean(icu.test$STA != pred.forest)
+  
+  icu.mse.bag[k] <- mean(error.bag)
+  icu.mse.forest[k] <- mean(error.forest)
+  k <- k + 1
+}
+
+which.min(icu.mse.bag)*10
+
+which.min(icu.mse.forest)*10
+
+library(ggplot2)
+qplot(num, icu.mse.bag) + geom_line() + geom_vline(xintercept = which.min(icu.mse.bag)*10, col = "purple")
+
+qplot(num, icu.mse.forest) + geom_line() + geom_vline(xintercept = which.min(icu.mse.forest)*10, col = "red")
+```
+
+We can see that the purple and red verticle line in the two graphs above is distinct. We have that for the bagging, we have that the enough number of trees is 10 and for forest, we have that the enough number of trees is 100.
+
+
+
+## Q4) Consider the USArrest data (Built-in data Posted on week 9). We will now perform hierarchical clustering on the state. 
+
+```{r}
+ar <- USArrests
+dim(ar)
+head(ar)
+```
+
+
+## a) Using hierarchical clustering with complete linkage and Euclidean distance, cluster the states. 
+
+```{r}
+hclust.ar <- hclust(dist(ar), method = "complete")
+hclust.ar
+
+plot(hclust.ar)
+```
+
+
+## b) Cut the dendrogram at a height that results in three distinct clusters. Which states belong to which clusters? 
+
+```{r}
+hclust.ar.3 <- cutree(hclust.ar, k = 3)
+
+# In the output below, we can see that all of the states are provided the values either 1, 2, or 3
+# We can see which states belong to which clusters in below
+hclust.ar.3
+
+# The frequencies for the amount of states in each clusters
+table(hclust.ar.3)
+```
+
+
+
+## c) Hierarchically cluster the states using complete linkage and Euclidean distance, after scaling the variables to have standard deviation one. 
+
+```{r}
+# First we aim to scale the variables
+ar.scale <- scale(ar)
+hclust.ar.scale <- hclust(dist(ar.scale), method = "complete")
+plot(hclust.ar.scale)
+
+
+# In the output below, we can see that all of the states are provided the values either 1, 2, or 3
+# We can see which states belong to which clusters in below
+hclust.ar.scale.3 <- cutree(hclust.ar.scale, k = 3)
+hclust.ar.scale.3
+
+# The frequencies for the amount of states in each clusters
+table(hclust.ar.scale.3)
+
+```
+
+
+
+## d) What effect does scaling the variables have on the hierarchical clustering obtained? In your opinion, should the variables be scaled before the inter-observation dissimilarities are computed? Provide a justification for your answer. 
+
+There is evident effect on the hierarchical clustering obtained when scaling the variables. This can be seen through looking at the frequency of each state in the three clusters. Prior to scaling, we have that for cluster 1,2,3 the frequencies are 16,14,20 respectively. After scaling, we see that for cluster 1,2,3 the frequencies are 8,11,31 respectively. Further, scaling the variables impacts the branch lengths, height of the trees, and the clusters that are obtained. In my opinion, the variables should be scaled before the inter-observation dissimilarities are computed. In this way, the variables can be more comparable and can draw a better result.
+
+
+
+## Q5) Consider the Olives data posted on ccle week 9.
+## > names(olive)
+##  [1] "region"      "area"        "palmitic"    "palmitoleic"
+##  [5] "stearic"     "oleic"       "linoleic"    "linolenic"
+##  [9] "arachidic"   "eicosenoic"
+
+
+```{r}
+temp <- read.csv("/Users/takaooba/Downloads/Olives.csv")
+temp <- temp[,-1]
+dim(temp)
+head(temp)
+```
+
+
+## a) Ignore the variable “area” from your data set. Convert the variable “region” to a factor variable. 
+
+```{r}
+olive_1 <- temp[,-2]
+olive_1$region <- as.factor(olive_1$region)
+
+# We can see that the region has a class of fctr
+head(olive_1)
+```
+
+## b) Use all the numerical variables (all but area and region) to create 3 clusters. First use k-means to create your 3 clusters, the use hierarchal clustering to create your three clusters (Use Average Linkage). 
+
+```{r}
+head(olive_1)
+
+# Looking at the predictors which will be column 2 to 9 
+temp.mat <- olive_1[, 2:9]
+prop.table(table(olive_1$region))
+```
+
+
+```{r}
+set.seed(1128)
+out <- kmeans(temp.mat, 3, nstart = 50)
+table(out$cluster, olive_1$region)
+```
+
+
+```{r}
+
+temp.mat.scale <- scale(temp.mat)
+
+
+# Performing a hierarchal clustering 
+h.avg <- hclust(dist(temp.mat.scale), method = "average")
+plot(h.avg)
+
+# cutting the tree to 3 clusters 
+h_comp_olive <- cutree(h.avg, 3)
+
+table(h_comp_olive)
+```
+
+## c) Provide plots and statistical summaries of your clustering methods. 
+
+```{r}
+set.seed(1128)
+x <- matrix(rnorm(52), ncol = 2)
+
+
+plot(x, col = (out$cluster + 1), main = "K-Means Clustering Results with K = 3", xlab = "", ylab = "", pch = 20, cex = 1)
+
+plot(h.avg)
+
+
+# two summary functions
+summary(out)
+summary(h.avg)
+```
+
+## d) Evaluate the success of the clustering by comparing to the three regions in the original data. What did you notice? 
+
+```{r}
+# Original Data
+table(temp$region)
+```
+
+Above is for the original data set. We have that for region 1,2,3 the frequency is 323, 98, and 151 respectively. 
+
+Compare this to below, which is from clustering.
+
+
+```{r}
+# Success of clustering 
+table(out$cluster)
+
+```
+
+Notice that the frequencies has drastically changed. For above, we have that the frequency 176, 212, 184 respectively. We have that the frequencies became more even or there are similar amount of points in each clusters compared to the original data. In the original data, we have that the frequency for 1,2,3 are fluctuating.
+
+## e) Perform PCA on the numerical variables. Take the first two principal components. Report the amount of variation explained by those two components. 
+
+```{r}
+pca.olive <- prcomp(temp.mat, scale = T)
+summary(pca.olive)
+```
+
+From the output above, we look at the row "Proportion of Variance" and "Cumulative Proportion"
+
+Specifically examining the first two principal components, we have that PC1 has a proportion of variance 0.4652 and PC2 is 0.2207. Overall, the first two principal components explains 68.59% of variance.
+
+
+## f) Plot PCA1 vs PCA2 and color them based on region. Perform k-means clustering with k=3 on PCA1 and PCA2. Plot PCA1 vs PCA2 and color them based on three clusters. What did you notice? 
+
+
+```{r}
+princomp.olive <- princomp(temp.mat, cor = T)
+comp <- princomp.olive$scores
+comp.1 <- -1*comp[,1]
+comp.2 <- -1*comp[,2]
+
+# We will be clustering below
+plot(comp.1, comp.2)
+
+summary(princomp.olive)
+
+temp <- cbind(comp.1, comp.2)
+cl <- kmeans(temp, 3)
+cl$cluster
+
+# The clustered points with 3 groups is as follows
+# Notice that there are three colors: green, red, and black
+plot(comp.1, comp.2, col = cl$cluster)
+
+points(cl$centers, pch= 16)
+table(cl$cluster)
+```
+
+
+We were able to cluster a group of points into three clusters utilizing k-means. Comparing to the prior scatterplot, we are able to see that the computer is able to cluster the points fairly well. However, notice that there are minor overlaps with certain points in different region which indicates that the clustering is not perfect.

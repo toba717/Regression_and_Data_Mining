@@ -1,0 +1,405 @@
+---
+title: "stats101c_hw4"
+author: "Takao"
+date: "10/31/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# TAKAO OBA
+# Stats 101C HW4
+
+
+
+# Q1 Download the training and the testing data sets
+
+```{r}
+library(ggplot2)
+# library(tidyverse)
+acc.test <- read.csv("/Users/takaooba/Downloads/predicting-car-accidents-severity/AcctestNoYNew.csv")
+
+acc.train <- read.csv("/Users/takaooba/Downloads/predicting-car-accidents-severity/Acctrain.csv")
+
+acc.test <- acc.test[,-1]
+
+```
+
+## (a) Report the dimensions of both the training and the testing data sets.
+
+The dimensions can be found by the following
+
+```{r}
+dim(acc.test)
+dim(acc.train)
+```
+
+
+## (b) How many numerical predictors does your data have? List them.
+
+```{r}
+head(acc.test)
+# colnames(acc.test)
+
+head(acc.train)
+# colnames(acc.train)
+```
+
+The numerical predictors are Start_Lat, Start_Lng, End_Lat, End_Lng, Distance.mi., Temperature.F., Wind_Chill.F., Humidity..., Pressure.in., Visibility.mi., Wind_Speed.mph. 
+There are a total of 11 numerical predictors.
+This is both for the training and testing data.
+
+## (c) How many categorical predictors does your data have? List them.
+
+The categorical predictors are Street, Side, City, Country, State, Zipcode, Country, Timezone, Airport_Code, Wind_Direction, Weather_Condition, Amenity, Bump, Crossing, Give_Way, Junction, No_Exit, Railway, Roundabout, Station, Stop, Traffic_Calming, Traffic Signal, Turning_Loop, Sunrise_Sunset, Civil_Twilight, Nautical_Twilight, Astronomical_Twilight
+There are a total of 29 categorical predictors.
+This is both for the training and testing data.
+
+
+
+
+## (d) Report the size of missing values in both data sets (Training and Testing)
+
+```{r}
+# Testing Data
+sum((is.na(acc.test)))
+```
+
+
+
+```{r}
+# Training Data
+sum(is.na(acc.train))
+```
+
+```{r}
+sum((is.na(acc.test))) + sum(is.na(acc.train))
+```
+
+
+## (e) Plot densities of your best six numerical predictors based on the response variable.
+
+```{r}
+acc.train.1 <- na.omit(acc.train)
+# head(acc.train.1)
+acc.train.1$SeverityNum <- ifelse(acc.train.1$Severity == "MILD", 0, 1)
+numericalpredictor <- acc.train.1[,c(4,5,6,7,8,20,21,22,23,24,26,45)]
+cor(numericalpredictor)
+```
+
+Based on the correlation plot that we have just created above, we have that the best predictors are Start_Lat, End_Lat, Start_Lng, End_Lng, Wine_Chill.F., Wind_Speed.mph. 
+
+```{r}
+ggstart_lat <- ggplot(acc.train.1, aes(Start_Lat, group = Severity, color = Severity  )) + geom_density()
+ggstart_lng <- ggplot(acc.train.1, aes(Start_Lng, group = Severity, color = Severity  )) + geom_density()
+ggend_lat <- ggplot(acc.train.1, aes(End_Lat, group = Severity, color = Severity  )) + geom_density()
+ggend_lng <- ggplot(acc.train.1, aes(End_Lng, group = Severity, color = Severity  )) + geom_density()
+ggdistance <- ggplot(acc.train.1, aes(Distance.mi., group = Severity, color = Severity  )) + geom_density()
+ggtemperature <- ggplot(acc.train.1, aes(Temperature.F., group = Severity, color = Severity  )) + geom_density()
+gghumidity <- ggplot(acc.train.1, aes(Humidity..., group = Severity, color = Severity  )) + geom_density()
+ggpressure <- ggplot(acc.train.1, aes(Pressure.in., group = Severity, color = Severity  )) + geom_density()
+ggvisibility <- ggplot(acc.train.1, aes(Visibility.mi., group = Severity, color = Severity  )) + geom_density()
+ggwind_speed <- ggplot(acc.train.1, aes(Wind_Speed.mph., group = Severity, color = Severity  )) + geom_density()
+ggwind_chill <- ggplot(acc.train.1, aes(Wind_Chill.F., group = Severity, color = Severity  )) + geom_density()
+
+library(gridExtra)
+grid.arrange(ggstart_lat, ggstart_lng, ggend_lat)
+grid.arrange(ggend_lng, ggdistance, ggtemperature)
+grid.arrange(gghumidity, ggpressure, ggvisibility, ggwind_speed, ggwind_chill)
+```
+
+Based on the above graphs, we have that the 6 best numerical variables are Start_Lat, End_Lat, Start_Lng, End_Lng, Wind_Chill.F., Temperature.F.
+
+
+We will continue to plot these 6 numerical variables
+```{r}
+grid.arrange(ggstart_lat, ggend_lat)
+grid.arrange(ggstart_lng, ggend_lng)
+grid.arrange(ggwind_chill, ggtemperature)
+```
+
+
+
+
+## (f) Create stacked par charts for your best three categorical predictors based on your response variable. 
+
+```{r}
+library(ggplot2)
+# 
+# Street, Side, City, Country, State, Zipcode, Country, Timezone, Airport_Code, Wind_Direction, Weather_Condition, Amenity, Bump, Crossing, Give_Way, Junction, No_Exit, Railway, Roundabout, Station, Stop, Traffic_Calming, Traffic Signal, Turning_Loop, Sunrise_Sunset, Civil_Twilight, Nautical_Twilight, Astronomical_Twilight
+
+# However, we will need to determine which predictors makes sense in the first place in the context of traffic accidents
+
+ggside <- ggplot(acc.train.1, aes(Side, group = Severity, color = Severity  , fill = Severity)) + geom_bar()
+ggstate <- ggplot(acc.train.1, aes(State, group = Severity, color = Severity  , fill = Severity)) + geom_bar()
+ggtimezone <- ggplot(acc.train.1, aes(Timezone, group = Severity, color = Severity  , fill = Severity)) + geom_bar()
+ggwinddirection <- ggplot(acc.train.1, aes(Wind_Direction, group = Severity, color = Severity  , fill = Severity)) + geom_bar()
+ggamenity <- ggplot(acc.train.1, aes(Amenity, group = Severity, color = Severity  , fill = Severity)) + geom_bar()
+ggbump <- ggplot(acc.train.1, aes(Bump, group = Severity, color = Severity , fill = Severity )) + geom_bar()
+ggcrossing <- ggplot(acc.train.1, aes(Crossing, group = Severity, color = Severity , fill = Severity )) + geom_bar()
+gggiveway <- ggplot(acc.train.1, aes(Give_Way, group = Severity, color = Severity , fill = Severity )) + geom_bar()
+ggjunction <- ggplot(acc.train.1, aes(Junction, group = Severity, color = Severity , fill = Severity )) + geom_bar()
+ggnoexit <- ggplot(acc.train.1, aes(No_Exit, group = Severity, color = Severity , fill = Severity )) + geom_bar()
+ggrailway <- ggplot(acc.train.1, aes(Railway, group = Severity, color = Severity  , fill = Severity)) + geom_bar()
+ggroundabout <- ggplot(acc.train.1, aes(Roundabout, group = Severity, color = Severity  , fill = Severity)) + geom_bar()
+ggstation <- ggplot(acc.train.1, aes(Station, group = Severity, color = Severity , fill = Severity )) + geom_bar()
+ggstop <- ggplot(acc.train.1, aes(Stop, group = Severity, color = Severity , fill = Severity )) + geom_bar()
+ggcalm <- ggplot(acc.train.1, aes(Traffic_Calming, group = Severity, color = Severity  , fill = Severity)) + geom_bar()
+ggsignal <- ggplot(acc.train.1, aes(Traffic_Signal, group = Severity, color = Severity , fill = Severity )) + geom_bar()
+ggloop <- ggplot(acc.train.1, aes(Turning_Loop, group = Severity, color = Severity , fill = Severity )) + geom_bar()   # There is only one boolean value so we will omit this predictor 
+ggsunset<- ggplot(acc.train.1, aes(Sunrise_Sunset, group = Severity, color = Severity  , fill = Severity)) + geom_bar()
+ggcivil <- ggplot(acc.train.1, aes(Civil_Twilight, group = Severity, color = Severity , fill = Severity )) + geom_bar()
+ggnautical <- ggplot(acc.train.1, aes(Nautical_Twilight, group = Severity, color = Severity , fill = Severity )) + geom_bar()
+ggastronomical <- ggplot(acc.train.1, aes(Astronomical_Twilight, group = Severity, color = Severity , fill = Severity )) + geom_bar()
+
+
+library(gridExtra)
+grid.arrange(ggside, ggstate, ggtimezone,ggwinddirection)
+grid.arrange(ggamenity, ggbump,ggcrossing, gggiveway)
+grid.arrange(ggjunction, ggnoexit, ggrailway, ggroundabout) 
+grid.arrange(ggstation, ggstop, ggcalm, ggsignal)
+grid.arrange(ggloop, ggsunset, ggcivil, ggnautical)
+grid.arrange(ggastronomical)
+```
+
+We aim to look at the proportion of the Severity (either MILD or SEVERE) between the different bars. We want to see the proportion of the MILD and SEVERE to be different between the bars and will look at these proportions to determine the best predictors.
+
+The best categorical predictors are Timezone, Give_Way, and Traffic_Signal.
+
+
+
+# Q2
+
+## (a) Build a classifier of your choice and predict the class of the unknown Y variable “Severity” in the testing data. Create a submission file (similar to the submission file example and submit your prediction on kaggle. If you already have a group, each member must submit his/her own file.
+
+```{r}
+numericaltest <- acc.test[,c(3,4,5,6,7,19,20,21,22,23,25)]
+numericaltrain <- acc.train.1[,c(1, 4,5,6,7,8,20,21,22,23,24,26)]
+
+# We will be imputing utilizing median values since mean can potentially draw NA's
+median1 <- apply(numericaltest, 2, median, na.rm = TRUE)
+
+dim(numericaltest)[2]
+
+# Imputing the corresponding median values, we have that
+
+for (i in 1:dim(numericaltest)[2]){
+  for (j in 1:dim(numericaltest)[1]){
+    if(is.na(numericaltest[j,i]) == TRUE){
+      numericaltest[j,i] <- as.numeric(median1[i])
+    }
+  }
+}
+
+# pred <- acc.train$Severity
+# # We will be removing the na values from both the testing and the training data sets.
+# 
+# numericaltest.1 <- na.omit(numericaltest)
+# numericaltrain.1 <- na.omit(numericaltrain)
+# 
+pred <- numericaltrain[,1]
+numericaltrain <- numericaltrain[,-1]
+# 
+# # temp <- which(is.na(acc.train))
+# # pred <- as.data.frame(pred[-temp,])
+# 
+# length(pred)
+# 
+# dim(numericaltest.1)
+# dim(numericaltrain.1)
+length(pred)
+dim(numericaltrain)
+sum(is.na(numericaltest))
+# sum(is.na(numericaltrain.1))
+```
+
+
+We transition into generating a classifier. This past weeks, we have showed a great emphasis on KNN models, so I will be applying what we have learned thus far.
+
+```{r}
+library(class)
+knn.model <- knn(numericaltrain, numericaltest,cl = pred, k = 1)
+# knn.model
+table(knn.model)
+# write.csv(knn.model,"knn.model.csv")
+```
+
+We can see that the model utilized the training and testing data to predict the severity of the accidents 
+
+
+## (b) Report your training model (summary)
+
+```{r}
+summary(knn.model)
+```
+
+Similar to part (a), we can see the results in the table above.
+
+## (c) Report your accuracy based on your training data.
+
+```{r}
+# With the training models, we have that
+
+knn.train <- knn(numericaltrain, numericaltrain, cl = pred, k = 1)
+
+# We have the confusion matrix given below
+table(knn.train, pred)
+```
+
+```{r}
+# Further, we will report the misclassification rate as follows
+mean(knn.train != pred)
+```
+
+Further, the accuracy rate is one minus the misclassification rate so we will have 1 - 0 = 1.
+The accuracy rate is1.
+
+
+
+## (d) Report your accuracy based on your testing (public score) on kaggle
+
+The accuracy based on kaggle is 0.86151
+
+## (e) Report your rank on kaggle at the time the predictions were submitted based on your public score.
+
+My prediction is 24th out of the 108 submissions that were made.
+
+# Q3
+# Download the birthsnewone.csv posted on bruinlearn week 6: The Y variable is the weight of the baby in grams
+
+```{r}
+birthsnew <- read.csv("/Users/takaooba/Downloads/birthsnewone.csv")
+birthsnew <- birthsnew[,-1]
+```
+
+## (a)
+## Fit a multiple linear model using the Least Squares Approach (lm function). Report your findings.
+
+```{r}
+set.seed(1128)
+model1 <- lm(Birth.Weight..g. ~ ., data = birthsnew)
+summary(model1)
+
+```
+
+Based on the linear model, we have that the significant predictors are Plurality.of.birth, gender, RaceWhite, Age.of.mother, Weeks, Visits, Birth.weight.group, Marital, Low.BirthNorm, SmokerNo, and Wt.Gain.
+
+## (b) Use Ridge Regression Approach to predict the weight of the baby in grams. Interpret the resulting model.
+
+```{r}
+# install.packages("glmnet")
+library(glmnet)
+```
+
+```{r}
+head(birthsnew)
+
+x = model.matrix(Birth.Weight..g. ~ ., data = birthsnew)
+y = birthsnew$Birth.Weight..g.
+
+# As given in the problem statement, we have the following
+i = seq(10, -2, length = 100)
+lambda.v = 10^i
+
+model.ridge <- glmnet(x, y, alpha = 0, lambda = lambda.v)
+summary(model.ridge)
+
+```
+
+```{r}
+# Get the coef of the model
+coeffs <- coef(model.ridge)
+dim(coeffs)
+
+
+my.l2 <- function(betas)
+{
+  sqrt(sum(betas^2))
+}
+ls2 <- c()
+for (i in 1:100){ls2 = c(ls2, my.l2(coeffs[-c(1,2),i]))}
+
+
+
+qplot(lambda.v, ls2)
+
+# We look at tthe graph more closely
+qplot(lambda.v[62:100], ls2[62:100])
+
+
+set.seed(1128)
+cv.output = cv.glmnet(x,y, alpha = 0)
+bestreg.cvL = cv.output$lambda.min
+bestreg.cvL
+bestcoeff = predict(model.ridge, s= bestreg.cvL, type = "coefficients")
+sqrt(sum(bestcoeff^2))
+```
+
+Above is the predicted weight of the baby in grams when utilizing the Ridge Regression pproach. It is the quantity of how the coefficients  change as lambda values grows.
+
+## (c) Make a plot that shows how the ratio of the size of the coefficients for Ridge Regression to the size of the coefficients for LS Change as lambda gets bigger. Your x-axis should have the values of lambda (from 10(-2) to 10(10). The y‐axis should have the ratio of the L2 norm of the Ridge Regression coefficients divided by the L2 Norm of the Least Squares coefficients. (Hint: you'll need to do a LS Regression with the variables standardized. Do not drop any terms from the model.)
+
+```{r}
+qplot(log(cv.output$lambda), cv.output$cvsd)
+plot(cv.output)
+```
+
+
+
+```{r}
+plot(model.ridge)
+```
+
+We can see that on the very top, we have that the value (48) does not decrease as we move to the right of the x axis, thus we will look at an alternative model. At the next part, we will be looking at the Lasso method 
+
+
+
+## (d) Use Lasso Regression Approach to predict the weight of the baby in grams and interpret
+
+```{r}
+model.lasso <- glmnet(x,y,alpha = 1, lambda = lambda.v)
+
+summary(model.lasso)
+
+coeffsL <- coef(model.lasso)
+set.seed(1128)
+
+cv.outputL=cv.glmnet(x,y,alpha=1)
+qplot(log(cv.outputL$lambda),cv.outputL$cvsd)
+
+my.l1=function(betas){#calculate l1 norm
+ sum(abs(betas))}
+ ls1=c()
+ for (i in 1:100){ ls1=c(ls1, my.l1(coeffsL[-c(1,2),i]))}
+ 
+qplot(lambda.v,ls1)
+#Zooming in we have that
+qplot(lambda.v[80:100],ls1[80:100], type = "b")
+
+cv.output = cv.glmnet(x,y, alpha = 1)
+bestlamb.cvL=cv.outputL$lambda.min
+bestlamb.cvL
+bestcoeffL = predict(model.lasso, s= bestlamb.cvL, type = "coefficients")
+sum(abs(bestcoeffL))
+```
+
+Above is the predicted weight of the baby in grams when utilizing the Lasso Regression approach. It is the quantity of how the coefficients  change as lambda values grows.
+
+## (e) Repeat (c) Using Lasso Regression.
+
+```{r}
+qplot(lambda.v, ls1)
+qplot(log(cv.outputL$lambda), cv.outputL$cvsd)
+
+plot(cv.outputL)
+```
+
+## Write a short paragraph compar
+
+
+Note the difference between the above graph and the graph constructed in part (c). We can see that at the very top of the graph or the top label, we note that the values are getting gradually smaller as we move to the right of the x axis. This is a good thing and was not seen in the graph constructed in part (c). We can thus conclude that the lasso regression model is a better approach then the Ridge Regression Approach.
+

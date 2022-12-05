@@ -1,0 +1,602 @@
+---
+title: "HW3"
+author: "Takao"
+date: "10/26/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Takao Oba
+# Stats 101c
+# HW 3
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Download Wine data from Bruinlearn week 4. Class is the response variable for this data
+
+# Q1
+# Split the data into 70% training and 30% testing using your birthday as a seed.
+
+```{r}
+library(tidyverse)
+library(MASS)
+wine <- read_csv("/Users/takaooba/Downloads/Wine Fall 2021.csv")
+wine <- wine[, -1]
+wine$Wine.Color <- as.factor(wine$Wine.Color)
+head(wine)
+```
+
+## (a)
+## Create a logistic regression using all predictors with a classification threshold of 0.5. Report your confusion matrices and error rates.
+
+```{r}
+set.seed(717)
+dim(wine)
+
+# We will have that 7000 instances are training 
+# We will have that 3000 instances are testing
+
+test.i <- sample(1:10000, 3000, replace = F)
+
+# wine$Wine.Color <- ifelse(wine$Wine.Color == "W", 1, 0)
+# wine$Wine.Color <- as.numeric(wine$Wine.Color)
+
+wine.test <- wine[test.i,]
+wine.train <- wine[-test.i,]
+
+
+wine.model <- glm(as.factor(Class) ~., data = wine.train, family = "binomial")
+wine.model
+
+
+
+wine.pred <- predict(wine.model, wine.test[,1:12], type = "response")
+wine.glm.pred <- rep("Bad", length(wine.pred))
+wine.glm.pred[wine.pred >= 0.5] <- "Good"
+
+wine.test.y <- wine.test$Class
+
+
+# testing
+table(wine.glm.pred, wine.test.y)
+
+mean(wine.glm.pred != wine.test.y)
+
+# training
+wine.pred <- predict(wine.model, wine.train[,1:12])
+wine.glm.pred <- rep("Bad", length(wine.pred))
+wine.glm.pred[wine.pred >= 0.5] <- "Good"
+wine.train.y <- wine.train$Class
+
+table(wine.glm.pred, wine.train.y)
+mean(wine.glm.pred != wine.train.y)
+```
+
+
+## (b)
+## Create a LDA model using all predictors. Report your confusion matrices and error rates.
+
+```{r}
+set.seed(717)
+model2 <- lda(Class ~ ., data = wine.train)
+
+# Testing 
+testwine <- predict(model2, wine.test[1:12], type = "response")
+table(testwine$class, wine.test$Class)
+mean(testwine$class != wine.test$Class)
+
+# Training
+trainwine <- predict(model2, wine.train[1:12], type = "response")
+table(trainwine$class, wine.train$Class)
+mean(trainwine$class != wine.train$Class)
+```
+
+
+
+## (c)
+## Create a QDA model using all predictors. Report your confusion matrices and error rates.
+
+```{r}
+set.seed(717)
+wine.qda <- qda(Class ~ ., data = wine.train, method = "mle")
+
+# Testing
+testwine <- predict(wine.qda, wine.test[1:12], type = "response")
+table(testwine$class, wine.test$Class)
+mean(testwine$class != wine.test$Class)
+
+# Training
+trainwine <- predict(wine.qda, wine.train[1:12], type = "response")
+table(trainwine$class, wine.train$Class)
+mean(trainwine$class != wine.train$Class)
+```
+
+
+## (d)
+## Create a KNN model with k = 25 (Use numerical predictors only after scaling them) 
+
+```{r}
+set.seed(717)
+# We will want to extract the numerical predictors after scaling them
+wine.num <- as.data.frame(scale(wine[,2:12]))
+
+W.X.test <- wine.num[test.i,]
+
+W.X.train <- wine.num[-test.i,]
+
+W.Y.test <- wine$Class[test.i]
+W.Y.train <- wine$Class[-test.i]
+
+library(class)
+
+# Testing
+wine.knn <- knn(W.X.train, W.X.test, W.Y.train, k = 25)
+table(wine.knn, W.Y.test)
+mean(wine.knn != W.Y.test)
+
+# Training
+wine.knn <- knn(W.X.train, W.X.train, W.Y.train, k = 25)
+table(wine.knn, W.Y.train)
+mean(wine.knn != W.Y.train)
+```
+
+
+## (e)
+## Compare and contrast between the models created parts A-D.
+
+We will now compare and contrast the models generated from parts A-D.
+The error rates are as follows:
+
+Logistic Regression Test: 0.3656667
+
+Logistic Regression Train: 0.3918571
+
+
+LDA Test: 0.3676667
+
+LDA Train: 0.3562857
+
+
+QDA Test: 0.3743333
+
+QDA Train:0.3684286
+
+
+KNN test: 0.3433333
+
+KNN train: 0.3128571
+
+Based on these error rates, the KNN is the best model, then LDA, then QDA, then logistic regression is the worst model. Overall, the error rates are relatively high in their 30s and 40s percent.
+
+
+# Q2
+# Use the full Wine data to: Use the LOOCV method and create the following:
+
+## (a)
+
+## Logistic regression. Report your confusion matrices and error rates.
+
+
+```{r}
+set.seed(717)
+# Logistic Regression
+
+library(boot)
+lr.model <- glm(factor(Class) ~ ., data = wine, family = binomial())
+lr.model
+
+# cv.error <- cv.glm(wine, lr.model)$delta
+# cv.error$K
+# cv.error$delta
+```
+
+We attempted to run "cv.error <- cv.glm(wine, lr.model)$delta" but notice that the code takes too long to run. We will continue on with the confusion matrix and the error rates.
+
+## (b)
+## LDA. Report your confusion matrix and error rate.
+
+```{r}
+set.seed(717)
+library(MASS)
+lda.LOOCV<- lda(Class~.,wine,CV = TRUE)
+summary(lda.LOOCV)
+
+# Confusion Matrix
+table(lda.LOOCV$class,wine$Class)
+
+# Error Rate
+mean(lda.LOOCV$class!=wine$Class)
+```
+
+## (c)
+## QDA. Report your confusion matrix and error rate.
+
+```{r}
+set.seed(717)
+qda.LOOCV <- qda(Class ~ ., data = wine, CV = TRUE)
+
+t = table(wine$Class, qda.LOOCV$class)
+t
+mean(wine$Class != qda.LOOCV$class)
+```
+
+
+
+## (d)
+## KNN with k = 25. Report your confusion matrix and error rate
+
+```{r}
+set.seed(717)
+# library(class)
+# 
+# head(wine)
+# 
+# length(wine[,-c(1,13)])
+# length(wine[,13])
+# 
+# # Testing
+# wine.knn <- knn.cv(wine[,- c(1,13)], wine[,13], k = 25)
+# 
+# 
+# table(wine.knn, W.Y.test)
+# mean(wine.knn != W.Y.test)
+
+X = as.matrix(wine[,-c(1,13)])
+Y = as.factor(wine$Class)
+
+
+knn.pred <- knn.cv(X,Y,k = 25)
+length(knn.pred)
+length(wine$Class)
+knn.loocv.cm <- table(Predicted = knn.pred, wine$Class, dnn = c("Predicted", "Actual"))
+knn.loocv.cm
+knn.error <- mean(knn.pred != wine$Class)
+knn.error
+
+
+```
+
+## (e)
+
+## Compare and contrast the LOOCV error rates across the created models.
+
+The error rate:
+
+Linear Regression: ?
+lda: 0.3596
+qda: 0.3713
+KNN: 0.3583
+
+Note that these are all error rates generated with the set seed of 717 (Takao Oba's birth date).
+Based on the generated models, we have that the best model is the KNN (a close tie to the lda model) and the worst model is the QDA. We are unsure about the confusion matrix and the error rate as the data takes too long to load, but we assume that the linear regression will be the worst model. 
+
+
+# Q3 
+# Use the full Wine data to: Use the CV 10-flod method and create the following:
+
+## (a)
+## Logistic regression. Report your confusion matrices and error rates.
+```{r}
+set.seed(717)
+# Logistic Regression
+lr.model <- glm(factor(Class) ~ ., data = wine, family = binomial())
+lr.model
+
+cv.error10 <- cv.glm(wine, lr.model, K = 10)
+
+# The K value
+cv.error10$K
+
+# Error Rate
+cv.error10$delta
+
+# install.packages("caret")
+# library(caret)
+
+```
+
+
+
+## (b)
+## LDA. Report your confusion matrix and error rate.
+
+```{r}
+set.seed(717)
+predfun.lda = function(train.x, train.y, test.x, test.y, negative){
+  require("MASS") # for lda function
+  lda.fit = lda(train.x, grouping=train.y)
+  ynew = predict(lda.fit, test.x)$class
+  # count TP, FP etc.
+  out = confusionMatrix(test.y, ynew, negative=negative)
+  return(out)
+}
+
+dim(wine)
+names(wine)
+
+X = as.matrix(wine[,-c(1,13)])
+Y = as.factor(wine$Class)
+dim(X) # 10000 11
+levels(Y) # "Bad", "Good"
+
+
+library(crossval)
+l.cv.out <- crossval(predfun.lda, X, Y, K=10, B=1, negative="Bad")
+l.cv.out
+
+# Computing the various diagnostic errors
+diagnosticErrors(l.cv.out$stat)
+
+# lda.LOOCV<- lda(Class~.,wine,CV = TRUE, k = 10)
+# summary(lda.LOOCV)
+# 
+# # Confusion Matrix
+# table(lda.LOOCV$class,wine$Class)
+# 
+# # Error Rate
+# mean(lda.LOOCV$class!=wine$Class)
+```
+To find the error rate, we will utilize the accuracy and perform the operation 1 - accuracy. 
+Thus, utilizing set.seed of 717, we have that the accuracy is 0.6412 thus the error rate will be 0.3589.
+
+## (c)
+## QDA. Report your confusion matrix and error rate.
+
+```{r}
+set.seed(717)
+
+predfun.qda = function(train.x, train.y, test.x, test.y, negative){
+  require("MASS") # for lda function
+  qda.fit = qda(train.x, grouping=train.y)
+  ynew = predict(qda.fit, test.x)$class
+  # count TP, FP etc.
+  out = confusionMatrix(test.y, ynew, negative=negative)
+  return(out)
+}
+
+l.cv.out <- crossval(predfun.qda, X, Y, K=10, B=1, negative="Bad")
+l.cv.out
+
+# Computing the various diagnostic errors
+diagnosticErrors(l.cv.out$stat)
+
+# qda.LOOCV <- qda(Class ~ ., data = wine, CV = TRUE, k = 10)
+# 
+# t = table(wine$Class, qda.LOOCV$class)
+# t
+# mean(wine$Class != qda.LOOCV$class)
+
+```
+
+Again, we will find the error rate by utilizing the accuracy. 
+The accuracy is 0.6269 and thus the error rate is correspondingly 0.3731.
+
+
+## (d)
+## KNN with k = 25. Report your confusion matrix and error rate
+
+```{r}
+set.seed(717)
+#install.packages("caret")
+library(caret)
+control <- trainControl(method = "cv", number = 10)
+
+
+
+fit <- train(Class ~ ., method = "knn", tuneGrid = expand.grid(k = 10), metric = "Accuracy", data = wine)
+
+fit
+
+```
+
+Thus, the error rate will be 1 minus the accuracy.
+We have that the error rate is 1-0.6494865 = 0.3505135.
+
+
+## (e)
+## Compare and contrast the 10-fold CV error rates across the created models.
+
+The error rate:
+
+Linear Regression: 0.2260684
+lda: 0.3589
+qda: 0.3731
+KNN: 0.3505135
+
+Note that these are all error rates generated with the set seed of 717 (Takao Oba's birth date).
+By looking at the error rates, we have that the best model is the linear regression and the worst model is the qda. The lda and KNN fairly have a close error rate. 
+
+
+# Q4
+# Download the births data posted ccle week 4. (Use Regsubset function from Leap library) (STAT 101A material)
+
+## (a) Use the appropriate transformation to the response variable first (birth weight). 
+
+
+```{r}
+births <- read.csv("/Users/takaooba/Downloads/births 10000 Short F2021.csv")
+births <- na.omit(births)
+head(births)
+```
+
+
+```{r}
+library(car)
+births.lm <- lm(Birth.Weight..g. ~., data = births)
+summary(births.lm)
+```
+
+
+
+
+
+```{r}
+inverseResponsePlot(births.lm)
+# The transformation with the lowest RSS is lambda = 0.9093993
+```
+
+Utilizing the inverseReversePlot, I determined that the transformation is with lambda of 0.9093993 because it has the lowest RSS value. 
+
+```{r}
+# births.lm <- lm((Birth.Weight..g.)^0.9093993 ~., data = births)
+weight <- (births$Birth.Weight..g.)^0.9093993
+
+summary(births.lm)
+# We can see that the adjusted R-squared increases by 0.007
+```
+
+Further, we will perform the transformation on the weight variable and generate the model correspondingly.
+
+
+
+## (b) Use Backwards Stepwise regression to determine a Least Squares model that predicts the birth weight based on best Mallows-Cp. Do this using set.seed(1128).
+
+```{r}
+library(leaps)
+
+set.seed(1128)
+
+regfit.bck <- regsubsets(weight ~ ., data = births, method = "backward")
+summary(regfit.bck)
+
+out <- summary(regsubsets(Birth.Weight..g. ~ ., data = births, method = "backward"))
+# lr.model <- lm(Birth.Weight..g. ~ ., data = births.t)
+# out <- summary(lr.model)
+
+# regfit.bck <- regsubsets(x = births[,1:37], y = births[,38], method = "backward")
+# summary(regfit.bck)
+```
+
+```{r}
+library(ggplot2)
+qplot(1:9, out$cp) + geom_line()
+```
+
+Notice how the plot follows an elbow shape where the difference is initially very great at first and gets smaller and smaller as we move to the right of the x-axis. We will select up to 9 predictors
+
+```{r}
+plot(regfit.bck, scale = "Cp")
+```
+
+Based on the plot, we can say that the significant predictors are 
+
+- Mother.Minority
+- Father Minority
+- Low Birth
+- Marital
+- Birth.weight.group 
+- Trimester.Prenatal
+- Prenatal
+- BDead
+- Total.Preg
+
+
+We will continue on to make a model utilizing these predictors
+
+```{r}
+best.select <- lm(weight ~ Mother.Minority + Father.Minority + Low.Birth + Marital + Birth.weight.group + Trimester.Prenatal + Prenatal + BDead + Total.Preg, data = births)
+summary(best.select)
+```
+
+
+## (c) Use Backwards Stepwise regression to determine a Least Squares model that predicts the birth weight based on best BIC. Do this using set.seed(1128).
+
+```{r}
+library(ggplot2)
+out <- summary(regsubsets(Birth.Weight..g. ~ ., data = births, method = "forward"))
+qplot(1:9, out$bic) + geom_line()
+```
+
+Notice how the plot follows an elbow shape where the difference is initially very great at first and gets smaller and smaller as we move to the right of the x-axis. We will select up to 9 predictors.
+
+```{r}
+plot(regfit.bck, scale = "bic")
+```
+
+Based on above graph, we have that the best predictors are
+- Mother.Minority
+- Father.Minority
+- Marital
+- Birth.weight.group
+- Trimester.Prenatal
+- Prenatal
+- BDead
+
+
+Further we will make a model utilizing these predictors
+
+```{r}
+best.select2 <- lm(weight ~ Mother.Minority + Father.Minority + Marital + Birth.weight.group + Trimester.Prenatal + Prenatal + BDead, data = births)
+summary(best.select2)
+```
+
+
+## (d) Use forward Stepwise regression to determine a Least Squares model that predicts the birth weight. based on best Mallows-Cp. Do this using set.seed(1128).
+
+```{r}
+set.seed(1128)
+
+regfit.fwd <- regsubsets(weight ~ ., data = births, method = "forward")
+summary(regfit.fwd)
+```
+
+```{r}
+plot(regfit.fwd, scale = "Cp")
+```
+
+
+Based on above graph, we have that the best predictors are
+- Mother.Minority
+- Father.Minority
+- Marital
+- Birth.weight.group
+- Trimester.Prenatal
+- Prenatal
+- BDead
+- Year.LBirth
+- Year.Term
+
+
+Further we will make a model utilizing these predictors
+
+```{r}
+best.select3 <- lm(weight ~ Mother.Minority + Father.Minority + Marital + Birth.weight.group + Trimester.Prenatal + Prenatal + BDead + Year.LBirth + Year.Term, data = births)
+summary(best.select3)
+```
+
+
+## (e) Use forward Stepwise regression to determine a Least Squares model that predicts the birth weight. based on best BIC. Do this using set.seed(1128).
+
+
+```{r}
+plot(regfit.fwd, scale = "bic")
+```
+
+
+Based on above graph, we have that the best predictors are
+- BDead
+- Prenatal
+- Mother.Minority
+- Father.Minority
+- Marital
+- Birth.weight.group
+- Trimester.Prenatal
+- Year.Term
+
+
+Further we will make a model utilizing these predictors
+
+```{r}
+best.select4 <- lm(weight ~ BDead + Prenatal + Mother.Minority + Father.Minority + Marital + Birth.weight.group + Trimester.Prenatal +  Year.Term, data = births)
+summary(best.select4)
+```
+
+
+## List the “best” Predictors. Write up a paragraph comparing results from parts b-d
+
+From the built models, we have that the best predictors are the Mother.Minority, Father.Minority, Birth.weight.group, Trimester.Prenatal, Prenatal, BDead. We notice that all the models has the same amount of adjusted R-Squared. However, the backwards bic has the least amount of predictors, thus this will be the best model. Regarding the selection of the predictors, I assessed the various possibilities with the Teacher Assistant Mr. Yuantong Li has stated that we shall select all the predictors that are touching the very top line. In conclusion, we utilized the backwards and forward selection and further utilized Mallows Cp and BIC as well. 
+

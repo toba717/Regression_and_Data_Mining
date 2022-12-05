@@ -1,0 +1,507 @@
+---
+title: "Stats101c_hw5"
+author: "Takao"
+date: '2022-11-15'
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Takao Oba
+# Stats 101C HW 5
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+# Q1) In this Question, we will predict the amount of money expend in college using the other variables in the College data set. Split the data set into a 70% training set and 30% testing set. Use set.seed(1128)
+
+```{r}
+temp <- read.csv("/Users/takaooba/Downloads/College Fall 2021.csv")
+
+college <- temp[, -c(1,2)]
+head(college)
+dim(college)
+
+# Splitting 70% training and 30% testing
+set.seed(1128)
+test.i <- sample(1:2000, 600, replace = F)
+college.test <- college[test.i,]
+
+college.train <- college[-test.i,]
+```
+
+## a) Fit a full multiple linear model using least squares on the training set, and report the MSE obtained using both data sets (training and testing).
+
+```{r}
+college.model <- lm(Expend ~ ., data = college.train)
+summary(college.model)
+```
+
+
+The MSE obtained using both data sets
+```{r}
+pred.train <- predict(college.model, college.train)
+pred.test <- predict(college.model, college.test)
+
+
+# MSE for the training data set
+sum((college.train$Expend - pred.train)^2)/length(pred.train)
+# MSE for the testing data set
+sum((college.test$Expend - pred.test)^2)/length(pred.test)
+```
+
+
+## b) Fit a ridge regression model on the training set, with lambda chosen by cross-validation. Report the MSE obtained using both data sets (training and testing).
+
+```{r}
+set.seed(1128)
+library(glmnet)
+
+# Training data 
+x = model.matrix(Expend ~ ., data = college.train)
+x.test <- model.matrix(Expend ~., data= college.test)
+y = college.train$Expend
+
+i = seq(10, -2, length = 100)
+lambda.v = 10^i
+
+
+model.ridge <- cv.glmnet(x, y, alpha = 0, lambda = lambda.v, type.measure = 'mse', keep=TRUE)
+lambda.ridge = model.ridge$lambda.min
+lambda.id <- which(model.ridge$lambda == model.ridge$lambda.min)
+model.ridge
+summary(model.ridge)
+
+
+mod1 <- glmnet(x,y, alpha = 0, lambda = lambda.v)
+mod1.train <- predict(mod1, s = lambda.ridge, newx = x)
+mod1.test <- predict(mod1, s = lambda.ridge, newx = x.test)
+
+# Training
+mean((mod1.train - college.train$Expend)^2)
+
+# Testing
+mean((mod1.test - college.test$Expend)^2)
+
+# mse <- function(x,y){mean((x-y)^2)}
+# mse.1 <- mse(model.ridge$fit[, lambda.id], y)
+# mse.1
+```
+
+Training MSE is 8163692 and testing MSE is 8163692.
+
+```{r}
+# set.seed(1128)
+# # Testing 
+# x = model.matrix(Expend ~ ., data = college.test)
+# y = college.test$Expend
+# 
+# i = seq(10, -2, length = 100)
+# lambda.v = 10^i
+# 
+# model.ridge <- cv.glmnet(x, y, alpha = 0, lambda = lambda.v, type.measure = 'mse', keep=TRUE)
+# lambda.lasso = model.ridge$lambda.min
+# lambda.id <- which(model.ridge$lambda == model.ridge$lambda.min)
+# model.ridge
+# summary(model.ridge)
+# 
+# mse <- function(x,y){mean((x-y)^2)}
+# mse.1 <- mse(model.ridge$fit[, lambda.id], y)
+# mse.1
+```
+
+
+
+
+## c) Fit a lasso model on the training set, with lambda chosen by cross validation. Report the MSE obtained using both data sets (training and testing), along with the number of non-zero coefficient estimates.
+
+```{r}
+set.seed(1128)
+# Training data 
+x = model.matrix(Expend ~ ., data = college.train)
+x.test = model.matrix(Expend ~ ., data = college.test)
+y = college.train$Expend
+
+i = seq(10, -2, length = 100)
+lambda.v = 10^i
+
+model.lasso <- cv.glmnet(x, y, alpha = 1, lambda = lambda.v, type.measure = 'mse', keep=TRUE)
+lambda.lasso = model.lasso$lambda.min
+lambda.id <- which(model.lasso$lambda == model.lasso$lambda.min)
+model.lasso
+summary(model.lasso)
+
+
+mod1 <- glmnet(x,y, alpha = 1, lambda = lambda.v)
+mod1.train <- predict(mod1, s = lambda.lasso, newx = x)
+mod1.test <- predict(mod1, s = lambda.lasso, newx = x.test)
+
+
+# Training
+mean((mod1.train - college.train$Expend)^2)
+
+# Testing
+mean((mod1.test - college.test$Expend)^2)
+
+# mse <- function(x,y){mean((x-y)^2)}
+# mse.1 <- mse(model.lasso$fit[, lambda.id], y)
+# mse.1
+```
+
+Training MSE is 8160593 and testing MSE is 10170911.
+
+```{r}
+# set.seed(1128)
+# # Testing 
+# x = model.matrix(Expend ~ ., data = college.test)
+# y = college.test$Expend
+# 
+# i = seq(10, -2, length = 100)
+# lambda.v = 10^i
+# 
+# model.ridge <- cv.glmnet(x, y, alpha = 1, lambda = lambda.v, type.measure = 'mse', keep=TRUE)
+# lambda.lasso = model.ridge$lambda.min
+# lambda.id <- which(model.ridge$lambda == model.ridge$lambda.min)
+# model.ridge
+# summary(model.ridge)
+# 
+# 
+# 
+# mse <- function(x,y){mean((x-y)^2)}
+# mse.1 <- mse(model.ridge$fit[, lambda.id], y)
+# mse.1
+```
+
+# Q2) Use the same data sets in Question 1 to:
+
+## a) Fit a PCR model on the training set, with M principal components chosen by cross validation. Report the MSE obtained using both data sets (training and testing). along with the value of M principal components selected by cross-validation. Report the amount of variation explained in the X matrix by those M principal component.
+
+```{r}
+# install.packages("pls")
+library(pls)
+pcr.college <-pcr(Expend ~., data = college.train, scale = TRUE, validation = "CV")
+
+validationplot(pcr.college, val.type = "MSEP")
+```
+
+From the graph above, we can see that the value of M principal components by cross validation is 2. We will further complete our computations.
+
+
+Next, we will report the MSE obtained using both data sets (training and testing)
+```{r}
+# Testing 
+pcr.pred.test <- predict(pcr.college, college.test, ncomp = 7)
+
+mean((pcr.pred.test - college.test$Expend)^2)
+
+# Training 
+pcr.pred.train <- predict(pcr.college, college.train, ncomp = 7)
+mean((pcr.pred.train - college.train$Expend)^2)
+
+
+```
+
+
+
+Now that we have assessed the MSEs of both data sets, we will look into the amount of variation explained in the X matrix by those M principal component.
+```{r}
+summary(pcr.college)
+```
+
+Using 85% as our threshold for the amount of variation in the X matrix, we will have that the variation explained is with 7 components and 59.94% of the variation explained. 
+
+
+
+## b) Fit a PLS model on the training set, with M principal components chosen by cross validation. Report the MSE obtained using both data sets (training and testing), along with the value of M principal components selected by cross-validation. Report the amount of variation explained in the X matrix by those M principal component. Note: Use 85% as your threshold for the amount of variation in the X matrix
+
+
+```{r}
+pls.college <- plsr(Expend ~ ., data = college.train, scale = TRUE, validation = "CV")
+
+validationplot(pls.college, val.type = "MSEP")
+```
+
+From the graph above, we can see that the value of M principal components by cross validation is 2. We will further complete our computations.
+
+
+Next, we will report the MSE obtained using both data sets (training and testing)
+
+```{r}
+# Testing 
+pls.pred.test <- predict(pls.college, college.test, ncomp = 10)
+mean((pls.pred.test - college.test$Expend)^2)
+
+# Training 
+pls.pred.train <- predict(pls.college, college.train, ncomp = 10)
+mean((pls.pred.train - college.train$Expend)^2)
+
+
+```
+
+Now that we have assessed the MSEs of both data sets, we will look into the amount of variation explained in the X matrix by those M principal component.
+```{r}
+summary(pls.college)
+```
+
+Using 85% as our threshold for the amount of variation in the X matrix, we will have that the variation explained is with 10 components and 69.65% of the variation explained. 
+
+
+# Q3) This question relates to the College data sets in question 1.
+
+## (a) Using “Expend” as the response and the other variables as predictors, perform backward stepwise selection (Choose BIC as your criteria) on the training set in order to identify a satisfactory model that uses just a subset of the predictors.
+
+```{r}
+library(leaps)
+
+regfit.bck <- regsubsets(Expend ~ ., data = college.train, method = "backward")
+summary(regfit.bck)
+
+plot(regfit.bck, scale = "bic")
+# out <- summary(regsubsets(Expend ~ ., data = college.train, method = "backward"))
+# qplot(1:10, out$bic) + geom_line()
+```
+
+We assess which predictors to examine through looking at the predictors where the bar touches the top of the graph which are Apps, Accept, Top10perc, Top25perc, Outstate, Terminal, S.F.Ratio, Grad.Rate
+
+
+```{r}
+# The satisfactory model is below
+college.train.1 <- college.train[,c(2,3,5,6,9,14,15,17,18)]
+college.model <- lm(Expend ~ ., data = college.train.1)
+summary(college.model)
+
+```
+
+To find the MSE of the backwards stepwise BIC model, we have 
+
+```{r}
+pred.train <- predict(college.model, college.train)
+pred.test <- predict(college.model, college.test)
+
+
+# MSE for the training data set
+sum((college.train$Expend - pred.train)^2)/length(pred.train)
+# MSE for the testing data set
+sum((college.test$Expend - pred.test)^2)/length(pred.test)
+```
+
+The MSE for training is 8302748 and the MSE for testing is 10200996
+
+
+## (b) Fit a GAM on the training data, using “Expend” as the response and the features selected in the previous step (Part a) as your predictors. Plot the results, and explain your findings.
+
+```{r}
+library(splines)
+library(ISLR)
+# install.packages("gam")
+library(gam)
+library(ggplot2)
+```
+
+```{r}
+
+ggplot(data= college.train.1, aes(Apps, Expend)) + geom_point() + geom_smooth()
+ggplot(data= college.train.1, aes(Accept, Expend)) + geom_point() + geom_smooth()
+ggplot(data= college.train.1, aes(Top10perc, Expend)) + geom_point() + geom_smooth()
+ggplot(data= college.train.1, aes(Top25perc, Expend)) + geom_point() + geom_smooth()
+ggplot(data= college.train.1, aes(Outstate, Expend)) + geom_point() + geom_smooth()
+ggplot(data= college.train.1, aes(Terminal, Expend)) + geom_point() + geom_smooth()
+ggplot(data= college.train.1, aes(S.F.Ratio, Expend)) + geom_point() + geom_smooth()
+ggplot(data= college.train.1, aes(Grad.Rate, Expend)) + geom_point() + geom_smooth()
+```
+
+
+```{r}
+gam0 <- lm(Expend ~ bs(Apps, 4) + Accept + Top10perc + bs(Top25perc, 4) + Outstate + bs(Terminal, 4) + bs(S.F.Ratio, 4) + bs(Grad.Rate, 4), data = college.train)
+summary(gam0)
+```
+
+The lowest p-value polynomials are 3 for Apps, 3 for Top25perc, 1 for Terminal, 2 for S.F.Ratio, and 1 for Grad.Rate
+
+## (c) Evaluate the model obtained on the testing data set, and explain the results obtained.
+
+We will determine what coefficients to use for from the previous summary output. For the non linear components Apps, Top25perc, Terminal, S.F.Ratio, and Grad.Rate, we will utilize the polynomial with the lowest p-value. Thus, we will have the following:
+
+
+```{r}
+gam1 <- gam(Expend ~ s(Apps,3) + Accept + Top10perc + s(Top25perc,3) + Outstate + s(Terminal,1) + s(S.F.Ratio,2) + s(Grad.Rate,1), data = college.train)
+
+# gam1 <- gam(Expend ~ s(Apps) + s(Accept) + s(Top10perc) + s(Top25perc) + s(Outstate) + s(Terminal) + s(S.F.Ratio) + s(Grad.Rate), data = college.train.1)
+
+
+par(mfrow = c(1,3))
+plot(gam1, se = TRUE, col = "blue")
+
+pred <- predict(gam1,newdata = college.test)
+
+
+# We will evaluate the model obtained on the testing data set by looking at the MSE.
+# The MSE can be determined through below
+MSE <- mean((college.test$Expend - pred)^2)
+MSE
+```
+
+```{r}
+# fit <- lm(Expend ~ bs(Apps, knots = c(25,40,60)), data = college)
+# dim(bs(college$Expend, knots = c(25,40, 60)))
+
+# fit.1 = lm(Expend~Apps, data = college)
+# fit.2 = lm(Expend~poly(Apps,2), data = college)
+# fit.3 = lm(Expend~poly(Apps,3), data = college)
+# fit.4 = lm(Expend~poly(Apps,4), data = college)
+# fit.5 = lm(Expend~poly(Apps,5), data = college)
+# anova(fit.1,fit.2,fit.3,fit.4,fit.5)
+```
+
+
+
+
+
+
+##(d) For which variables, if any, is there evidence of a non-linear relationship with the response?
+
+The variables with a non-linear relationship with the response are Apps, Top25perc, Terminal, S.F.Ratio, Grad.Rate
+
+
+# Q4) Comment on the results obtained. How accurately can we predict the amount of money expend by college students? Is there much difference among the testing MSEs resulting from these seven approaches?
+
+The MSEs for the seven approaches are as follows
+1. Least Squares full model using lm
+10174615
+2. Ridge model with the best lambda
+10157872
+3. Lasso model with the best lambda
+10170911
+4. PCR model
+12321549
+5. PLS model
+10189596
+6. Stepwise backward regression using BIC
+10200996
+7. GAM 
+8938132
+
+```{r}
+temp <- c(10174615,10157872,10170911,12321549,10189596,10200996,8938132)
+
+temprow <- c("Least Squares", "Ridge Model", "Lasso Model", "PCR", "PLS", "Backward BIC", "GAM")
+tempdf <- data.frame("Models" <- temprow, "MSEs" <- temp)
+
+
+library(ggplot2)
+ggplot(data = tempdf, aes(Models, MSEs)) + geom_bar(stat= "identity", color = "blue", fill = "lightblue") + coord_cartesian(ylim=c(8500000,12400000)) + ggtitle("MSEs of each Models")+theme(plot.title = element_text(color="Blue", size=20, face="bold.italic"))
+
+```
+
+In the table above, we are able to see the various MSEs by the seven models that we have generated. We can see that the GAM model has the lowest MSE, the PCR model has the highest MSE, and the other models have fairly similar MSE values.
+
+
+# Q5) You may have seen the "betterbirths2000" data in Stats 10. It consists of a random sample of 2000 births in North Carolina that are collected in order to track health issues in new born babies. These data are saved in a file better2000births.csv on bruinlearn Week 8.
+
+```{r}
+temp <- read.csv("/Users/takaooba/Downloads/better2000births.csv")
+births <- na.omit(temp)
+births$Marital <- factor(births$Marital)
+births$Racemom <- factor(births$Racemom)
+births$Racedad <- factor(births$Racedad)
+births$Hispmom <- factor(births$Hispmom)
+births$Hispdad <- factor(births$Hispdad)
+births$Habit <- factor(births$Habit)
+births$MomPriorCond <- factor(births$MomPriorCond)
+births$BirthDef <- factor(births$BirthDef)
+births$DelivComp <- factor(births$DelivComp)
+births$BirthComp <- factor(births$BirthComp)
+head(births)
+```
+
+
+## a) Split your data into Training and Testing. You should have 1000 observations in your training data after omitting the missing values in your data. Use the set.seed “1128” to do the split. Use a tree (not pruned) to predict whether a baby will be born prematurely or normal. What is the testing misclassification error?
+
+```{r}
+dim(births)
+
+
+
+set.seed(1128)
+test.i <- sample(1:nrow(births), 1000, replace = F)
+
+births.test <- births[-test.i,]
+births.train <- births[test.i,]
+
+```
+
+Using a tree
+
+```{r}
+# install.packages("tree")
+library(tree)
+
+births.model <- tree(formula = factor(Premie) ~ ., data = births.train)
+
+plot(births.model)
+text(births.model, pretty =0)
+
+births.y <- births.test$Premie
+
+preds <- predict(births.model, newdata = births.test, type = "class")
+
+conf.matrx <- table(preds, factor(births.test$Premie))
+
+conf.matrx
+(conf.matrx[2,1] + conf.matrx[1,2])/sum(conf.matrx)
+```
+
+
+
+## b) Use cross-validation to determine if the tree can be improved through pruning. If so, prune the tree to the appropriate size and provide a plot.
+
+```{r}
+cv.train <- cv.tree(births.model, FUN = prune.misclass)
+names(cv.train)
+
+# Find best value using the plot function
+plot(cv.train$dev ~ cv.train$size, type = "b")
+
+pruned.fit <- prune.misclass(births.model, best = 3)
+plot(pruned.fit)
+text(pruned.fit, pretty = TRUE)
+
+
+
+```
+
+We will see if pruning makes the misclassification rate better. Recall that without pruning, we had a misclassification rate of 0.06212425
+
+```{r}
+summary(pruned.fit)
+
+# births.train
+```
+
+Now, we see that the misclassification rate is 0.056 which is lower than the misclassification rate without pruning.
+
+## c) Interpret your pruned tree (or your tree in (a) if you did not need to prune). In particular, does it tell us whether smoking is a potential cause of premature births? What factors are associated with premature births?
+
+Basing on the pruned tree, we have that the factors that are associated with premature births is Weights. The pruned plot have performed fairly well with a low misclassification rate. Intuitively, smoking should be a potential cause of premature births, but in this decision tree, we were not able to conclude that smoking is directly associated with premature births. 
+However, according to CDC.gov (https://www.cdc.gov/tobacco/campaign/tips/diseases/pregnancy.html#:~:text=Smoking%20slows%20your%20baby's%20growth,babies%20often%20have%20health%20problems.&text=Smoking%20can%20damage%20your%20baby's%20developing%20lungs%20and%20brain.), we have that smoking slows the baby's growth before birth, or more specifically, the weight of the baby.
+The factor that is most associated with premature births is Weights.
+
+
+## d) What is the testing misclassification error rate of your pruned tree? Keep in mind that approximately 9% of all births are premature. This means that if a doctor simply predict "not premature" ALWAYS, he or she will have only a 9% misclassification error. Did you do better based on your tree models?
+
+```{r}
+preds <- predict(pruned.fit, newdata = births.test, type = "class")
+
+conf.matrx <- table(preds, factor(births.test$Premie))
+
+conf.matrx
+(conf.matrx[2,1] + conf.matrx[1,2])/sum(conf.matrx)
+```
+The misclassification rate for testing is 0.05711423.
+Since the misclassification rate is 5.71%, which is less than the 9% misclassification error, we have that this tree models is better than simply predicting "not premature" for all the babies. 
+
+
+

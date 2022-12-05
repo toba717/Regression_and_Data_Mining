@@ -1,0 +1,544 @@
+---
+title: "Stats101C_HW1"
+author: "Takao Oba"
+date: "9/30/2022"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Name: Takao Oba
+
+
+## Question 1 
+## Upload HW1Train.csv posted on bruinlearn week 2. 
+
+## (a)Fit the following 5 models. 1) log(x), 2) poly(x,2) 3) poly(x,3) 4) poly(x,4) and 5) poly(x,5). Call them Model 1 through 5 respectively. List the MSE_training R-squared and R-Squared Adjusted for each of the five models. 
+
+### Reading in the "HW1Train.csv" file 
+```{r}
+setwd("/Users/takaooba/Downloads/")
+train <- read.csv("HW1Train.csv")
+train <- train[,c(2,3)]
+head(train)
+```
+
+### Fitting the models
+```{r}
+# log(x)
+model1 <- lm(y ~ log(x), data = train)
+# poly(x,2)
+model2 <- lm(y ~ poly(x,2), data = train)
+# poly(x,3)
+model3 <- lm(y ~ poly(x,3), data = train)
+# poly(x,4)
+model4 <- lm(y ~ poly(x,4), data = train)
+# poly(x,5)
+model5 <- lm(y ~ poly(x,5), data = train)
+```
+
+### MSE_training, R-squared, and R-squared Adjusted
+```{r}
+# model 1
+# ANOVA table
+anova(model1)$Mean[2]
+# Summary Table
+summary(model1)
+
+# model 2
+# ANOVA table
+anova(model2)$Mean[2]
+# Summary Table
+summary(model2)
+
+# model 3
+# ANOVA table
+anova(model3)$Mean[2]
+# Summary Table
+summary(model3)
+
+# model 4
+# ANOVA table
+anova(model4)$Mean[2]
+# Summary Table
+summary(model4)
+
+# model 5
+# ANOVA table
+anova(model5)$Mean[2]
+# Summary Table
+summary(model5)
+```
+The MSE for model 1 is 3572.03, the R-squared is 0.5287, and the adjusted R-squared is 0.524
+
+The MSE for model 2 is 3687.86, the R-squared is 0.5184, and the adjusted R-squared is 0.5085
+
+The MSE for model 3 is 3628.061, the R-squared is 0.531, and the adjusted R-squared is 0.5165
+
+The MSE for model 4 is 3572.341, the R-squared is 0.543, and the adjusted R-squared is 0.5239
+
+The MSE for model 5 is 3609.788, the R-squared is 0.543, and the adjusted R-squared is 0.5189
+
+
+## (b) Create three ggplots where the x axis is the model and the y axis is either MSE or Rsquared or R-squared adjusted.
+```{r}
+df1 <- data.frame(Models <- c("Model 1", "Model 2", "Model 3", "Model 4", "Model 5"), MSE <- c(3572.03, 3687.86, 3628.061, 3572.341, 3609.788), R_Squared <- c(0.5287, 0.5184, 0.531, 0.543, 0.543), Adj_RSQ <- c(0.524, 0.5085, 0.5165, 0.5239, 0.5189))
+
+colnames(df1) <- c("Models", "MSE", "R-Squared", "Adjusted R-Squared")
+
+library(ggplot2)
+ggplot(data = df1, aes(Models, MSE)) + geom_point() + ggtitle("MSE by Models")
+ggplot(data = df1, aes(Models, R_Squared)) + geom_point() + ggtitle("R-Squared by Models")
+ggplot(data = df1, aes(Models, Adj_RSQ)) + geom_point() + ggtitle("Adjusted R-Squared by Models")
+```
+
+## (c) Based on MSE_training plot, which model would you choose as the best fit?
+Based on the MSE training plot, we will choose model 1 or model 4 since they have the smallest MSE
+
+## (d) Based on the R-Squared adjusted plots which model would you choose as the best fit?
+Based on the R-Squared Adjusted Plot, we will choose model 1 or 4 since they have the highest R-Squared
+
+## (e) Report the partial slopes for each model.
+```{r}
+summary(model1)
+```
+The partial slope for Model 1 can be found through the summary function.
+b_1 = 73.394
+
+```{r}
+summary(model2)
+```
+The partial slopes for Model 2 can be found through the summary function.
+b_1 = 601.855, b_2 = -163.561
+
+```{r}
+summary(model3)
+```
+The partial slopes for Model 3 can be found through the summary function.
+b_1 = 601.855, b_2 = -163.561, b_3 = 97.408
+
+```{r}
+summary(model4)
+```
+The partial slopes for Model 4 can be found through the summary function
+b_1 = 601.855, b_2 = -163.561, b_3 = 97.408, b_4 = -94.748
+
+```{r}
+summary(model5)
+```
+The partial slopes for Model 5 can be found through the summary function
+b_1 = 601.855, b_2 = -163.561, b_3 = 97.408, b_4 = -94.748, b_5 = -3.854
+
+## (f) Now upload HW1Test.csv posted on bruinlearn week 2. Use the five models you got from part (a) to predict the y-values for x values in the testing data. Then, use the generated y-values (predicted values) along with the testing y values to compute the MSE_testing for each of the five models. (Hint: use the predict() command to get the predicted y values for the vector x).
+```{r}
+testVal <- read.csv("/Users/takaooba/Downloads/HW1Test.csv")
+testVal <- testVal[,c(2,3)]
+predict1 <- predict(model1, newdata = testVal)
+predict2 <- predict(model2, newdata = testVal)
+predict3 <- predict(model3, newdata = testVal)
+predict4 <- predict(model4, newdata = testVal)
+predict5 <- predict(model5, newdata = testVal)
+MSE_1 <- mean((testVal[,2] - predict.lm(model1, testVal))^2)
+MSE_2 <- mean((testVal[,2] - predict.lm(model2, testVal))^2)
+MSE_3 <- mean((testVal[,2] - predict.lm(model3, testVal))^2)
+MSE_4 <- mean((testVal[,2] - predict.lm(model4, testVal))^2)
+MSE_5 <- mean((testVal[,2] - predict.lm(model5, testVal))^2)
+cat("Solved the MSE for each model through the formula given in the lectures. This is biased since it is not influenced by the amount of predictors.", "\n")
+cat("The MSE for model 1 utilizing (1/n)*.... is ", as.character(MSE_1), "\n")
+cat("The MSE for model 2 utilizing (1/n)*.... is ", as.character(MSE_2), "\n")
+cat("The MSE for model 3 utilizing (1/n)*.... is ", as.character(MSE_3), "\n")
+cat("The MSE for model 4 utilizing (1/n)*.... is ", as.character(MSE_4), "\n")
+cat("The MSE for model 5 utilizing (1/n)*.... is ", as.character(MSE_5), "\n")
+```
+
+## (g) Write a sentence or two describing how the MSE_testing and MSE_training compared to each other for each model. Now based on your answers to part b and part c and your MSEs, which of the five models you think is the true model used to create such data? (preferable to create a ggplot using the 5 models vs the testing and training MSEs. ”Use two different colors to distinguish testing MSEs from Training MSEs”
+
+```{r}
+ActualMSE <- c(3572.03, 3687.86, 3628.061, 3572.341, 3609.788)
+PredictedMSE <- c(3756.98878669711, 3731.96440929781, 
+                  3827.5639456516, 3742.80522856432, 3747.37425167557)
+
+df2 <- data.frame(Models = c("Model1","Model2", "Model3", "Model4", "Model5"), 
+                  Actual_MSE = ActualMSE, Predicted_MSE = PredictedMSE)
+
+ggplot(data = df2, aes(Models, Actual_MSE, color = "train")) + geom_point() + 
+  geom_point(data = df2,  aes(Models, Predicted_MSE))+ geom_point(aes(color = "test")) + 
+  ggtitle("MSE Comparisons by Models") + labs(color = "Definitions of Colors")
+```
+
+## Question 2
+## Check out the Heart Data file heart.csv on the bruinlearn under Week 2. The Heart data set contain a binary outcome HD for 303 patients who presented with chest pain. An outcome value of Yes indicates the presence of heart disease based on an angiographic test, while No means no heart disease. There are 13 predictors including Age, Sex, Chol (a cholesterol measurement), Thal (Thallium stress test) and other heart and lung function measurements. Some of these variables are categorical and some are numerical.
+
+## (a) Write four questions that could be answered with these data. Two of your questions should be questions that require estimating the parameters, and two should be prediction questions. Indicate which question is a 'parameter estimation' question and which is a 'prediction' question. (The Statistical Learning textbook classifies these as 'inference' vs. 'prediction' questions.)
+```{r}
+heart <- read.csv("/Users/takaooba/Downloads/Heart.csv")
+heart <- heart[,-1]
+head(heart)
+```
+
+In the Statistical Learning textbook, the author expands on the difference between inference and predictions. 
+For inference, utilizing a set of data, the researcher intends to "infer" how the output generates as a function of the data.
+In comparison,for prediction, the researcher will be given a new measurement and will aim to use the current data to predict or choose the correct outcome.
+
+Parameter Estimation Questions 
+
+1. What quantitative predictors are associated with experiencing heart disease? 
+
+2. Are men more likely to experience heart disease?
+
+
+Prediction Question
+
+1. Out of the new batch of patients, who will experience heart disease?
+
+2. Given someone is a 50 year old man with a cholesterol of 260, is he safe from a heart disease?
+
+## (b) Choose one of your questions and answer it. It doesn't have to be a good answer (so you don't have to find the best model or justify the model), but you do have to give the answer to your question and explain how you answered it.
+
+Are men more likely to experience heart disease?
+
+To approach this problem, we will assess the questions through the null hypothesis of 
+"There is no significant difference between the observed and the expected value"
+
+We will look at the predictor "Sex" which has the vales 0 and 1. 
+```{r}
+unique(heart[,2])
+```
+We will conduct a chi test goodness of fit to assess this question.
+
+```{r}
+heartTemp <- heart[,c(2,14)]
+library(dplyr)
+heartTemp %>% group_by(AHD) %>% count(Sex)
+
+# Conducting chi squared test (GOF)
+testingVal <- c(72,92,25,114)
+chisq.test(testingVal, p = c(1/4,1/4,1/4,1/4))
+```
+
+We have that the test statistic is 56.987. Further, we have that the p-value is 2.587 e-12 < 0.05.
+Thus, we have that the test statistic is significant.
+Thus, there is a significant difference between the observed and the expected value.
+
+
+## Question 3  The objective of a study was to find out whether there was any relationship between level of education (high school, four-year college, and graduate work) and attitude toward pre-screening for breast cancer (i.e., going for mammograms). A sample size of 512 were selected for this study. Complete the anova table. Find the numerical values of A,B, C, D, E, F, G, and H
+
+#### Attached below is the answers to the respective slots from A-H with works shown
+
+![](/Users/takaooba/Downloads/stats101chw1q3.jpeg)
+
+
+
+
+
+
+
+## Question 4
+## This exercise involves the Auto data set studied in the lab. Make sure that the missing values have been removed from the data.
+
+```{r}
+library(tidyverse)
+# Introduce read_csv
+auto <- read_csv("/Users/takaooba/Downloads/Auto.csv")
+dim(auto)
+# Determine if there is any NAs
+apply(X = is.na(auto), MARGIN = 2, FUN = sum)
+
+# However we introduce "?"
+auto[auto$horsepower == "?", ]
+auto$horsepower <- as.numeric(auto$horsepower)
+auto <- na.omit(auto)
+
+# Have successfully omitted the five NA values
+dim(auto)
+# Notice that the dimension was originally 397 by 9 and now is 392 by 9
+
+auto[auto$horsepower == "?", ]
+# Notice there are no "?"
+```
+
+## (a) Which of the predictors are quantitative, and which are qualitative?
+
+```{r}
+sapply(auto, class)
+```
+Numeric does not guarantee quantitative, so we will further assess through the head function
+
+```{r}
+head(auto)
+```
+
+Qualitative predictors are "year", "origin", "name"
+
+Quantitative predictors are : "mpg" "cylinders", "displacement", "horsepower", "weight", "acceleration"
+
+## (b)  What is the range of each quantitative predictor? You can answer this using the range() function. 
+```{r}
+autoInter0 <- auto[,c(1,2,3,4,5,6)]
+apply(autoInter0, MARGIN = 2, range)
+# range(auto$mpg)
+# range(auto$cylinders)
+# range(auto$displacement)
+# range(auto$horsepower)
+# range(auto$weight)
+# range(auto$acceleration)
+```
+
+mpg: Range is 9.0 and 46.6 
+
+cylinders: Range is 3 and 8
+
+displacement: Range is 68 and 455
+
+horsepower: Range is 46 and 230
+
+weight: Range is 1613 and 5140
+
+acceleration: Range is 8.0 and 24.8
+
+## (c) What is the mean and standard deviation of each quantitative predictor?
+```{r}
+apply(autoInter0, MARGIN = 2, mean)
+apply(autoInter0, MARGIN = 2, sd)
+```
+
+Mean of mpg: 23.44592
+
+SD of mpg: 7.805007
+
+Mean of cylinders: 5.471939
+
+SD of cylinders: 1.705783
+
+Mean of displacement: 194.412
+
+SD of displacement: 104.644
+
+Mean of horsepower: 104.4694
+
+SD of of horsepower: 38.49116
+
+Mean of weight: 2977.584
+
+SD of weight: 849.4026
+
+Mean of acceleration: 15.54133
+
+SD of acceleration: 2.758864
+
+## (d) Now remove the 10th through 85th observations. What is the range, mean, and standard deviation of each predictor in the subset of the data that remains?
+```{r}
+auto1 <- auto[-c(10:85), ]
+head(auto1)
+autoInter <- auto1[,c(1,2,3,4,5,6)]
+
+apply(autoInter, MARGIN = 2, mean)
+apply(autoInter, MARGIN = 2, sd)
+apply(autoInter, MARGIN = 2, range)
+```
+
+## (e) Using the full data set, investigate the predictors graphically, using scatterplots or other tools of your choice. Create some plots highlighting the relationships among the predictors. Comment on your findings.
+```{r}
+#install.packages("GGally")
+library("GGally")
+autoQuantitative <- auto[,c(1,2,3,4,5,6)]
+ggpairs(autoQuantitative)
+autoCategorical <- auto[,c(7,8,9)]
+```
+There were some interesting findings through the plot above. There is a high correlation between horsepower and cylinder, horsepower and displacement and a negative relationship between horsepower and mpg. This makes sense as more cylinders generally indicates more power. For example, a ferrari 812 GTS is a v12 indicating it has 12 cylinders and makes 788 hp. On the contrary, a toyota prius is a 4 cylinder car making 121 hp. Additionally, the negative relationship between horsepower and mpg makes sense because for example, a prius does around 50 mpg where the ferrari 812 GTS does around 12 mpg. As a car lover, it is amazing to visually see these relationships amongst the various components of a car.  
+
+## (f) Suppose that we wish to predict gas mileage (mpg) on the basis of the other variables. Do your plots suggest that any of the other variables might be useful in predicting mpg? Justify your answer.
+```{r}
+cor(autoQuantitative)
+```
+
+From the investigation that we have generated in the previous part, it suffice to say that the  "weight" variable is best in predicting mpg because they have the highest correlation. Then, the next best predictor will be "displacement" with the second highest correlation. Further, considering the numeric variables, we will conclude that the order of correlation will be the order of "horsepower", "cylinders" and "acceleration" will be the worst predictor with the lowest correlation. 
+
+
+We will assess this through an anova test
+```{r}
+anova(lm(mpg ~ cylinders + displacement + horsepower + weight + acceleration, data = auto))
+```
+Notice how acceleration is not significant and the p-value is 0.8171.
+
+Reassessing the model with the significant predictors, we have that 
+```{r}
+anova(lm(mpg ~ cylinders + displacement + horsepower + weight, data = auto))
+```
+Now, we have that the predictors "cylinders" "displacement" "horsepower" and "weight" are all significant.
+
+
+## Question 5  
+## This exercise involves the Boston housing data set
+
+## (a) To begin, load in the Boston data set. The Boston data set is part of the MASS library in R.
+
+## How many rows are in this data set? How many columns? What do the rows and columns represent?
+
+```{r}
+library (MASS)
+# Boston
+?Boston
+dim(Boston)
+```
+There are 506 rows and 14 columns
+Each row represents the housing observations and the column represents the various predictors. 
+
+
+### b Make some pairwise scatterplots of the predictors (columns) in this data set. Describe your findings
+```{r}
+Boston$chas <- as.numeric(Boston$chas)
+Boston$rad <- as.numeric(Boston$rad)
+pairs(Boston)
+```
+
+```{r}
+cor(Boston)
+```
+
+If we were to go directly into making the pairwise scatter plot, although we can see the general picture, it is difficult to  assess the details. We will take the predictors with  the highest correlation with capita crime rate.
+
+```{r}
+bostonInter <- Boston[,c(1,3,5,9, 10, 13)]
+ggpairs(bostonInter)
+```
+
+From above, we can see the scatter plot for some of the predictors as well as the correlations. Considering the "crim" or per capita crime rate by town to be the outcome, we have that the predictors "rad" "tax" and "lstat" are the best predictors for "crim".
+
+## (c) Are any of the predictors associated with per capita crime rate? If so, explain the relationship.
+
+The predictors that appear to be associated with per capita crime rate are "rad" "tax" and "lstat" through looking at the correlation with "crim"
+
+```{r}
+plot(crim ~rad, data = Boston)
+plot(crim ~ tax, data = Boston)
+plot(crim ~ lstat, data= Boston)
+```
+We assess these three predictors through the correlation plot and we do in fact see that these predictors are associated with per capita crime rate. 
+
+## (d) Do any of the suburbs of Boston appear to have particularly high crime rates? Tax rates? Pupil-teacher ratios? Comment on the range of each predictor.
+
+We will consider an observation to be in the higher outlier to be considered "particularly high". We can see if an observation is an outlier simply through looking at a boxplot. 
+
+```{r}
+boxplot(Boston$crim, horizontal = TRUE, xlab = "Per capita crime rate by town")
+```
+
+There seems to be some suburbs of Boston to have particularly high crime rates. 
+
+```{r}
+range(Boston$crim)
+```
+
+The range of crime rate in Boston ranges from 0.00632 to 88.9762
+
+
+```{r}
+boxplot(Boston$tax, horizontal = TRUE, xlab = "Full-value property-tax rate per $10,000.")
+```
+There does not seem to be any suburbs of Boston with high property-tax rate.
+
+```{r}
+range(Boston$tax)
+```
+The range of the property-tax rate in Boston is 187 and 711
+
+```{r}
+boxplot(Boston$ptratio, horizontal = TRUE, xlab = "Pupil-teacher ratio by town.")
+```
+There does not seem to be any suburbs of Boston with particularly high pupil-teacher ratio.
+
+```{r}
+range(Boston$ptratio)
+```
+The range of the pupil-teacher ratio is from 12.6 to 22.0.
+
+
+## (e) How many of the suburbs in this data set bound the Charles river?
+
+
+To assess the amount of suburbs that bound the Charles river, we will look at the predictor "chas".
+When looking at the R Documentation for this particular variable, we have that 1 indicates that the observation bounds the river, thus we would simply count the amount of observations in the data frame with "chas" = 1
+```{r}
+sum(Boston$chas == 1)
+```
+
+35 suburbs were bounded by the Charles river.
+
+## (f) What is the median pupil-teacher ratio among the towns in this data set?
+
+We will focus on the "ptratio" predictor
+```{r}
+median(Boston$ptratio)
+```
+The median pupil-teacher ratio among the towns in this data set is 19.05
+
+## (g) Which suburb of Boston has lowest median value of owneroccupied homes? What are the values of the other predictors for that suburb, and how do those values compare to the overall ranges for those predictors? Comment on your findings.
+```{r}
+# The lowest median value of owner occupied homes is given below
+min(Boston$medv)
+# Then we will look at the indeces where the lowest median value occurs
+Boston[Boston$medv == 5,]
+```
+
+```{r}
+summary(Boston)
+```
+
+Comparing the values from indeces 399 and 406 to the overall ranges of those predictors, we notice that 
+
+crim - The crime rate is particularly higher than other observations for both 399 and 406.
+
+zn - Both 0.0 for observations 399 and 406 which is the minimum as well as the median for all observations.
+
+indus - The proportion of non-retail business acres per town is particularly high for both observations.
+
+chas - Both not bounded by river (majority for other observations as well)
+
+nox - The nitrogen oxides concentration is particularly high for both observations.
+
+rm - The average number of rooms per dwelling is below the 1st quantile for both observations.
+
+age - The proportion of owner occupied units built prior to 1940 are both observations are the maximum values
+
+dis - The weighted mean of distances to five Boston employment centres is below 1st quantile for both observations.
+
+rad - the index of accessibility to radial highways is max for both observations.
+
+tax - The full-value property tax rate per $10000 is at the 3rd quantile for both observations.
+
+ptratio - The pupil-teacher ratio by town is both at the 3rd quantile for both observations.
+
+black - The black predictor is max for observation 399 and is particularly high for observation 406
+
+lstat - The lower status of the population is particularly high for both observations.
+
+Of course, the medv or the median value of owner-occupied homes in $1000s is the lowest for both observations.
+
+## (h) In this data set, how many of the suburbs average more than seven rooms per dwelling? More than eight rooms per dwelling? Comment on the suburbs that average more than eight rooms per dwelling
+```{r}
+sum(Boston$rm > 7)
+sum(Boston$rm > 8)
+```
+There are 64 suburbs that average more than 7 rooms per dwelling
+
+There are 13 suburbs that average more than 8 rooms per dwelling
+
+
+```{r}
+interVar <- subset(Boston, rm > 8)
+
+summary(interVar)
+summary(Boston)
+```
+
+We see that the suburbs with more than 8 rooms are generally nicer suburbs/towns. The crime rate is lower, the percent of lower status is lower, the nitrogen oxides concentration is lower, and a low pupil teacher ratio. 
+
+
+
+
