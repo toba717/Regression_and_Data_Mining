@@ -540,4 +540,3 @@ summary(Boston)
 We see that the suburbs with more than 8 rooms are generally nicer suburbs/towns. The crime rate is lower, the percent of lower status is lower, the nitrogen oxides concentration is lower, and a low pupil teacher ratio. 
 
 
-
