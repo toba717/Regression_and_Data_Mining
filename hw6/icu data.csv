@@ -1,0 +1,201 @@
+STA,race.n,age.c,sys.c,hra.c,SEX,SER,CAN,CRN,INF,CPR,PRE,TYP,FRA,PO2,PH,PCO,BIC,CRE,LOC
+survive,white,-30.545,9.72,-10.925,Female,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,1.455,-20.28,-18.925,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,19.455,-32.28,-28.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-3.545,9.72,4.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,fracture,< 60,7.25,45,18,2,no coma
+survive,white,29.455,-22.28,55.075,Female,"Medical, Surgical2",cancer,renal failure,infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,11.455,-22.28,33.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,> 60,7.25,45,<18,2,no coma
+survive,white,5.455,-28.28,-32.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-27.545,11.72,11.075,Female,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,-22.545,-24.28,-38.925,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,12.455,5.72,4.075,Female,"Medical, Surgical2",no cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-2.545,55.72,-12.925,Female,"Medical, Surgical2",cancer,renal failure,infection,no,previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,-9.545,29.72,1.075,Male,"Medical, Surgical2",no cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,8.455,27.72,-18.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,3.455,41.72,0.075,Female,"Medical, Surgical1",cancer,no renal failure,no infection,no,no previous,emergency,no fracture,< 60,> 7.25,45,<18,>2,no coma
+survive,white,8.455,73.72,-8.925,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,>2,no coma
+survive,white,-5.545,17.72,-27.925,Male,"Medical, Surgical2",cancer,renal failure,infection,no,previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-2.545,7.72,17.075,Male,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,1.455,-84.28,-59.925,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,> 60,7.25,>45,<18,2,coma
+survive,white,5.455,-0.28,29.075,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,14.455,-12.28,-18.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,2.455,-18.28,11.075,Male,"Medical, Surgical1",cancer,renal failure,infection,yes,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,20.455,47.72,-23.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-41.545,-28.28,12.075,Female,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,4.455,67.72,21.075,Male,"Medical, Surgical2",cancer,no renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,3.455,-22.28,21.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-22.545,17.72,-0.925,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,16.455,37.72,-6.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,>45,18,2,no coma
+survive,white,10.455,25.72,-2.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,11.455,-0.28,-38.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-6.545,-22.28,0.075,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-2.545,-4.28,-6.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,other,6.455,25.72,-8.925,Female,"Medical, Surgical2",cancer,renal failure,infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,30.455,7.72,-10.925,Female,"Medical, Surgical2",cancer,renal failure,infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-34.545,-20.28,-34.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,fracture,< 60,7.25,45,18,2,no coma
+survive,white,15.455,1.72,-38.925,Female,"Medical, Surgical2",no cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,>45,18,2,no coma
+survive,other,-4.545,-22.28,-28.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,16.455,41.72,-12.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,10.455,9.72,-9.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,8.455,37.72,-3.925,Female,"Medical, Surgical1",cancer,renal failure,infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,2.455,-22.28,-6.925,Male,"Medical, Surgical2",no cancer,renal failure,infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,6.455,27.72,21.075,Male,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,8.455,17.72,21.075,Male,"Medical, Surgical2",no cancer,renal failure,infection,no,no previous,elective,no fracture,< 60,7.25,>45,18,2,no coma
+survive,white,-38.545,9.72,7.075,Female,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,emergency,fracture,< 60,7.25,45,18,2,no coma
+survive,white,-39.545,13.72,13.075,Female,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,5.455,29.72,-14.925,Male,"Medical, Surgical2",cancer,renal failure,infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-12.545,-6.28,11.075,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,6.455,29.72,15.075,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,10.455,67.72,71.075,Female,"Medical, Surgical1",cancer,renal failure,infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,6.455,-6.28,23.075,Female,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,> 60,7.25,>45,18,2,no coma
+survive,white,24.455,2.72,-28.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,15.455,37.72,-10.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,12.455,-46.28,54.075,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,previous,emergency,no fracture,< 60,7.25,>45,18,2,no coma
+survive,white,3.455,-64.28,25.075,Male,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,6.455,-16.28,-10.925,Male,"Medical, Surgical2",no cancer,renal failure,infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-10.545,-12.28,-15.925,Male,"Medical, Surgical2",no cancer,renal failure,infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,11.455,37.72,1.075,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,9.455,57.72,26.075,Female,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-39.545,23.72,0.075,Male,"Medical, Surgical2",no cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,19.455,25.72,8.075,Male,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,-25.545,-12.28,-14.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-38.545,-28.28,22.075,Female,"Medical, Surgical2",cancer,renal failure,infection,no,previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,14.455,-2.28,-12.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-8.545,-20.28,13.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,10.455,21.72,-24.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,24.455,-2.28,32.075,Male,"Medical, Surgical2",cancer,no renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,other,-25.545,-22.28,19.075,Female,"Medical, Surgical1",cancer,renal failure,infection,yes,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,20.455,-6.28,-2.925,Female,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-0.545,-4.28,5.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,>45,18,2,no coma
+survive,white,-11.545,-0.28,-8.925,Female,"Medical, Surgical2",no cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-34.545,11.72,-10.925,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-2.545,-0.28,13.075,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-39.545,-20.28,-22.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,fracture,< 60,7.25,45,18,2,no coma
+survive,white,-37.545,31.72,9.075,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,17.455,-32.28,-50.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,21.455,-20.28,-31.925,Male,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-17.545,7.72,-33.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,fracture,< 60,7.25,45,18,2,no coma
+survive,white,18.455,-22.28,-28.925,Male,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,8.455,6.72,-6.925,Female,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,18.455,57.72,1.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,22.455,29.72,-54.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-34.545,-12.28,-10.925,Female,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,-9.545,-40.28,63.075,Male,"Medical, Surgical2",cancer,renal failure,infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,9.455,-42.28,-6.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,11.455,17.72,-13.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,other,7.455,75.72,25.075,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,14.455,-6.28,-10.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-2.545,57.72,37.075,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,> 60,> 7.25,>45,18,2,no coma
+survive,white,-17.545,-2.28,-33.925,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-2.545,-22.28,-12.925,Female,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-23.545,-22.28,-18.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,fracture,< 60,7.25,45,18,2,no coma
+survive,white,-10.545,-0.28,-30.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-16.545,-14.28,46.075,Female,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,> 7.25,45,<18,2,no coma
+survive,white,26.455,-32.28,4.075,Female,"Medical, Surgical1",cancer,no renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,<18,>2,no coma
+survive,white,30.455,-22.28,-52.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,19.455,79.72,-11.925,Female,"Medical, Surgical2",no cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,>45,18,2,no coma
+survive,white,22.455,-10.28,27.075,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,> 60,7.25,45,<18,2,no coma
+survive,white,-41.545,-32.28,41.075,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,fracture,< 60,7.25,45,18,2,no coma
+survive,white,12.455,27.72,-38.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,25.455,5.72,-7.925,Female,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,-34.545,-2.28,-46.925,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,9.455,-12.28,21.075,Female,"Medical, Surgical1",cancer,renal failure,no infection,yes,no previous,emergency,no fracture,< 60,> 7.25,>45,18,2,no coma
+survive,white,-39.545,-2.28,41.075,Male,"Medical, Surgical2",no cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,19.455,3.72,39.075,Female,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,elective,no fracture,> 60,> 7.25,>45,18,2,no coma
+survive,white,-9.545,-4.28,-2.925,Female,"Medical, Surgical1",cancer,renal failure,no infection,yes,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,-33.545,7.72,-12.925,Female,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,13.455,-8.28,7.075,Female,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,14.455,1.72,-38.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,19.455,37.72,16.075,Female,"Medical, Surgical2",cancer,no renal failure,no infection,no,previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,2.455,-8.28,36.075,Male,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-11.545,-22.28,29.075,Male,"Medical, Surgical2",no cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,7.455,-32.28,6.075,Female,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-21.545,91.72,26.075,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,10.455,-20.28,-34.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,0.455,21.72,-0.925,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,18.455,-40.28,13.075,Female,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,-16.545,-22.28,45.075,Female,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,<18,>2,no coma
+survive,other,-37.545,-12.28,-30.925,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,33.455,19.72,26.075,Male,"Medical, Surgical1",cancer,no renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,17.455,7.72,-8.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-32.545,-1.28,36.075,Female,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,<18,2,no coma
+survive,white,12.455,-54.28,44.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,> 60,7.25,45,18,2,no coma
+survive,white,-10.545,23.72,13.075,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,other,17.455,11.72,21.075,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,>2,no coma
+survive,black,-17.545,27.72,51.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,previous,emergency,fracture,< 60,7.25,45,18,2,no coma
+survive,white,13.455,15.72,93.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,> 60,> 7.25,>45,18,2,no coma
+survive,white,12.455,-42.28,41.075,Female,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,> 60,7.25,45,<18,2,no coma
+survive,white,0.455,15.72,-3.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-3.545,3.72,-18.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,19.455,-4.28,-39.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-2.545,5.72,41.075,Male,"Medical, Surgical2",no cancer,renal failure,infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-36.545,-12.28,-36.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,-4.545,37.72,16.075,Male,"Medical, Surgical1",cancer,no renal failure,no infection,yes,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-26.545,13.72,1.075,Female,"Medical, Surgical1",no cancer,no renal failure,infection,yes,no previous,emergency,no fracture,< 60,> 7.25,>45,18,2,no coma
+survive,white,13.455,71.72,-46.925,Male,"Medical, Surgical2",no cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,-8.545,17.72,1.075,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,2.455,-16.28,-6.925,Female,"Medical, Surgical1",cancer,renal failure,infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-7.545,23.72,0.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,> 60,7.25,>45,18,2,no coma
+survive,white,-12.545,-0.28,10.075,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,fracture,< 60,7.25,45,18,2,no coma
+survive,white,-36.545,-22.28,-8.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,15.455,-2.28,-15.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-29.545,-10.28,-18.925,Male,"Medical, Surgical2",cancer,renal failure,infection,no,previous,elective,fracture,< 60,7.25,45,18,2,no coma
+survive,white,-40.545,7.72,-20.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,fracture,< 60,7.25,45,18,2,no coma
+survive,other,-40.545,-2.28,41.075,Female,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-36.545,9.72,-19.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,10.455,-41.28,-19.925,Female,"Medical, Surgical2",no cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,other,-40.545,3.72,-20.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,2.455,-24.28,21.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,11.455,36.72,-25.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,30.455,57.72,-10.925,Female,"Medical, Surgical1",cancer,no renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-37.545,-12.28,-18.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,31.455,57.72,15.075,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,>45,18,2,coma
+survive,white,4.455,-22.28,-20.925,Female,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-11.545,9.72,-9.925,Male,"Medical, Surgical1",cancer,no renal failure,infection,no,no previous,emergency,no fracture,< 60,> 7.25,45,<18,2,no coma
+survive,white,-38.545,-32.28,38.075,Male,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,13.455,-8.28,25.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,> 60,> 7.25,>45,18,2,no coma
+survive,white,9.455,19.72,-20.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-37.545,-28.28,-15.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,black,15.455,29.72,1.075,Female,"Medical, Surgical1",cancer,no renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,1.455,-32.28,-10.925,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+survive,white,-15.545,-10.28,-14.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,fracture,< 60,7.25,45,18,2,no coma
+die,white,29.455,-52.28,-2.925,Female,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,emergency,fracture,> 60,> 7.25,>45,18,2,no coma
+die,white,18.455,-4.28,-8.925,Female,"Medical, Surgical2",cancer,renal failure,infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,20.455,-2.28,33.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,<18,2,no coma
+die,white,5.455,-20.28,7.075,Male,"Medical, Surgical1",cancer,no renal failure,infection,no,previous,emergency,no fracture,> 60,7.25,45,18,2,no coma
+die,white,-38.545,7.72,-22.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,9.455,-70.28,46.075,Female,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,>2,no coma
+die,white,-4.545,15.72,29.075,Female,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,> 7.25,>45,18,2,no coma
+die,white,34.455,-8.28,-18.925,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,<18,2,no coma
+die,white,-0.545,-22.28,25.075,Male,"Medical, Surgical1",cancer,renal failure,infection,yes,no previous,emergency,no fracture,< 60,7.25,45,18,2,coma
+die,white,17.455,-2.28,37.075,Female,"Medical, Surgical2",no cancer,renal failure,no infection,no,no previous,elective,no fracture,< 60,7.25,45,18,2,no coma
+die,white,33.455,-68.28,26.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,>45,18,2,no coma
+die,white,12.455,35.72,23.075,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,elective,no fracture,> 60,7.25,45,18,2,stupor
+die,white,30.455,8.72,41.075,Male,"Medical, Surgical1",cancer,renal failure,infection,yes,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,-16.545,7.72,-40.925,Male,"Medical, Surgical2",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,coma
+die,white,3.455,7.72,-17.925,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,22.455,-32.28,-13.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,-17.545,-46.28,-18.925,Male,"Medical, Surgical1",cancer,renal failure,infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,17.455,-42.28,1.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,stupor
+die,white,5.455,-96.28,-12.925,Female,"Medical, Surgical2",cancer,no renal failure,infection,yes,no previous,emergency,fracture,< 60,7.25,45,18,>2,coma
+die,white,17.455,57.72,-4.925,Female,"Medical, Surgical1",no cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,-37.545,15.72,-26.925,Male,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,fracture,< 60,7.25,45,18,2,no coma
+die,white,13.455,9.72,-3.925,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,-6.545,1.72,1.075,Female,"Medical, Surgical2",cancer,renal failure,infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,stupor
+die,white,7.455,-66.28,-4.925,Male,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,coma
+die,other,11.455,37.72,-38.925,Female,"Medical, Surgical1",cancer,no renal failure,no infection,no,previous,emergency,no fracture,> 60,7.25,45,18,2,no coma
+die,white,-2.545,-10.28,1.075,Male,"Medical, Surgical2",cancer,no renal failure,infection,no,previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,-7.545,-12.28,-2.925,Female,"Medical, Surgical2",no cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,20.455,-22.28,-17.925,Male,"Medical, Surgical1",cancer,renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,13.455,-62.28,13.075,Female,"Medical, Surgical1",cancer,renal failure,no infection,yes,no previous,emergency,no fracture,< 60,7.25,45,18,2,coma
+die,white,27.455,3.72,-2.925,Female,"Medical, Surgical2",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,17.455,-2.28,20.075,Male,"Medical, Surgical1",cancer,no renal failure,infection,no,no previous,emergency,no fracture,< 60,> 7.25,45,<18,>2,no coma
+die,white,7.455,-28.28,51.075,Female,"Medical, Surgical1",cancer,renal failure,infection,yes,no previous,emergency,no fracture,< 60,7.25,>45,18,2,coma
+die,white,-8.545,7.72,9.075,Male,"Medical, Surgical1",cancer,renal failure,infection,yes,no previous,emergency,no fracture,< 60,7.25,45,<18,2,no coma
+die,white,17.455,17.72,-32.925,Female,"Medical, Surgical1",cancer,no renal failure,infection,yes,no previous,emergency,no fracture,< 60,7.25,45,18,>2,coma
+die,white,14.455,-42.28,61.075,Female,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,no coma
+die,white,11.455,-52.28,-17.925,Male,"Medical, Surgical1",cancer,no renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,coma
+die,white,6.455,-52.28,19.075,Male,"Medical, Surgical1",no cancer,renal failure,infection,no,no previous,emergency,no fracture,> 60,7.25,45,18,>2,no coma
+die,white,2.455,-76.28,15.075,Male,"Medical, Surgical1",cancer,renal failure,infection,no,previous,emergency,no fracture,< 60,> 7.25,45,<18,2,no coma
+die,other,2.455,-2.28,-43.925,Male,"Medical, Surgical2",cancer,no renal failure,infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,stupor
+die,black,-7.545,123.72,-34.925,Female,"Medical, Surgical1",cancer,renal failure,no infection,no,no previous,emergency,no fracture,< 60,7.25,45,18,2,stupor
